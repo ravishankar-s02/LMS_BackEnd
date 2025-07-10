@@ -1,15 +1,31 @@
 using LMS.Services;
 using LMS.Services.Interfaces;
+using LMS.Mapper; // ✅ AutoMapper Profile namespace
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services
-builder.Services.AddControllers();
+// 1. Add Controllers + JSON Settings
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.PropertyNamingPolicy = null;
+    });
+
+// 2. Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<ILoginService, LoginService>();
 
-// Add CORS: Allow any origin, method, and header
+// 3. Service Registrations
+builder.Services.AddScoped<ILoginService, LoginService>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<ICommonService, CommonService>();
+
+// 4. AutoMapper
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+// 5. CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -22,16 +38,15 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// Swagger UI only in Development
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-// Enable CORS before routing
+// Middleware
 app.UseCors("AllowAll");
-
 app.UseAuthorization();
-
 app.MapControllers();
 app.Run();
