@@ -13,5 +13,4 @@ namespace LMS.Models.DataModels
         public string Marital_Status { get; set; }
         public string Nationality { get; set; }
     }
-
 }

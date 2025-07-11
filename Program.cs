@@ -19,8 +19,9 @@ builder.Services.AddSwaggerGen();
 
 // 3. Service Registrations
 builder.Services.AddScoped<ILoginService, LoginService>();
-builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IPersonalService, PersonalService>();
 builder.Services.AddScoped<ICommonService, CommonService>();
+builder.Services.AddScoped<IEmploymentService, EmploymentService>();
 
 // 4. AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));
