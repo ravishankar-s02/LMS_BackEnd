@@ -37,7 +37,7 @@ namespace LMS.Mapper
             CreateMap<TeamDetailsModel, TeamDetailsViewModel>()
                 .ForMember(dest => dest.employeeId, opt => opt.MapFrom(src => src.SS_Emp_Code))
                 .ForMember(dest => dest.designation, opt => opt.MapFrom(src => src.Designation))
-                .ForMember(dest => dest.teamManager, opt => opt.MapFrom(src => src.Team_HR_Head))
+                .ForMember(dest => dest.teamAndHrHead, opt => opt.MapFrom(src => src.Team_HR_Head))
                 .ForMember(dest => dest.projectManager, opt => opt.MapFrom(src => src.Project_Manager))
                 .ForMember(dest => dest.teamLead, opt => opt.MapFrom(src => src.Team_Lead));
 

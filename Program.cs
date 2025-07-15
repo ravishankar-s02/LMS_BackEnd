@@ -22,6 +22,8 @@ builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IPersonalService, PersonalService>();
 builder.Services.AddScoped<ICommonService, CommonService>();
 builder.Services.AddScoped<IEmploymentService, EmploymentService>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<ILeaveManagementService, LeaveManagementService>();
 
 // 4. AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));
