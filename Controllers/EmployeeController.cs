@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 using LMS.Models.ViewModels;
 using LMS.Services.Interfaces;
 
@@ -15,7 +16,7 @@ namespace LMS.Controllers
             _employeeService = employeeService;
         }
 
-        [HttpPost("add-full-details")]
+        [HttpPost("add-employee-details")]
         public async Task<IActionResult> AddFullDetails([FromBody] EmployeeFullDetailsViewModel model)
         {
             try
@@ -26,6 +27,30 @@ namespace LMS.Controllers
             catch (Exception ex)
             {
                 return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpGet("view-employee-details")]
+        public async Task<ActionResult<EmployeeFullProfileViewModel>> GetEmployeeProfile(string empCode)
+        {
+            var profile = await _employeeService.GetEmployeeFullProfileAsync(empCode);
+            if (profile == null)
+                return NotFound("Employee not found");
+
+            return Ok(profile);
+        }
+
+        [HttpPut("update-employee-details")]
+        public async Task<IActionResult> UpdateEmployeeProfile([FromBody] EmployeeFullDetailsPUTViewModel model)
+        {
+            try
+            {
+                var result = await _employeeService.UpdateFullEmployeeDetailsPUTAsync(model);
+                return result ? Ok("Profile updated successfully") : BadRequest("Update failed");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
             }
         }
     }

@@ -22,7 +22,7 @@ namespace LMS.Services
         public async Task<(int Status, string Message)> ApplyLeaveAsync(LeaveApplicationViewModel model)
         {
             var result = await _db.QueryFirstOrDefaultAsync<(int, string)>(
-                "Sp_ApplyLeave_SS",
+                "SS_ApplyLeave_SP",
                 new
                 {
                     EmpFK = model.EmpFK,
@@ -33,6 +33,25 @@ namespace LMS.Services
                     Reason = model.Reason,
                     InsertedUser = model.InsertedUser
                 },
+                commandType: CommandType.StoredProcedure);
+
+            return result;
+        }
+
+        public async Task<IEnumerable<MyLeaveHistoryViewModel>> GetMyLeaveHistoryAsync(string empCode)
+        {
+            var result = await _db.QueryAsync<MyLeaveHistoryViewModel>(
+                "SS_GetMyLeaveHistory_SP",
+                new { EmpCode = empCode },
+                commandType: CommandType.StoredProcedure);
+
+            return result;
+        }
+
+        public async Task<IEnumerable<UsersLeaveHistoryViewModel>> GetUsersLeaveHistoryAsync()
+        {
+            var result = await _db.QueryAsync<UsersLeaveHistoryViewModel>(
+                "SS_GetUsersLeaveHistory_SP",
                 commandType: CommandType.StoredProcedure);
 
             return result;

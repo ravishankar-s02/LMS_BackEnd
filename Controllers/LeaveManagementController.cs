@@ -25,5 +25,19 @@ namespace LMS.Controllers
 
             return BadRequest(new { message });
         }
+
+        [HttpGet("my-history")]
+        public async Task<IActionResult> GetMyLeaveHistory(string empCode)
+        {
+            var history = await _leaveManagementService.GetMyLeaveHistoryAsync(empCode);
+            return Ok(history);
+        }
+
+        [HttpGet("users-history")]
+        public async Task<IActionResult> GetUsersLeaveHistory()
+        {
+            var history = await _leaveManagementService.GetUsersLeaveHistoryAsync();
+            return Ok(history);
+        }
     }
 }

@@ -22,7 +22,7 @@ public class CommonService : ICommonService
         using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
 
         var result = await connection.QueryAsync<CommonModel>(
-            "sp_GetCommonByType",
+            "SS_GetCommonByType_SP",
             new { CodeType = codeType },
             commandType: CommandType.StoredProcedure
         );
