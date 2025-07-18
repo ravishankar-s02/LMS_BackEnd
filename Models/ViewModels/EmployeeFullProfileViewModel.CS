@@ -2,37 +2,37 @@ namespace LMS.Models.ViewModels
 {
     public class EmployeeFullProfileViewModel
     {
-        public string SS_Emp_Code { get; set; }
-        public string Emp_Status { get; set; }
-        public string First_Name { get; set; }
-        public string Last_Name { get; set; }
-        public DateTime Date_Of_Birth { get; set; }
-        public string Gender { get; set; }
-        public string Marital_Status { get; set; }
-        public string Nationality { get; set; }
+        public string empCode { get; set; }
+        public string empStatus { get; set; }
+        public string firstName { get; set; }
+        public string lastName { get; set; }
+        public DateTime dateOfBirth { get; set; }
+        public string gender { get; set; }
+        public string maritalStatus { get; set; }
+        public string nationality { get; set; }
 
-        public string Phone_Number { get; set; }
-        public string Alternate_Number { get; set; }
-        public string Email { get; set; }
-        public string Street_Address { get; set; }
-        public string City { get; set; }
-        public string State { get; set; }
-        public string ZipCode { get; set; }
-        public string Country { get; set; }
+        public string phoneNumber { get; set; }
+        public string alternateNumber { get; set; }
+        public string email { get; set; }
+        public string streetAddress { get; set; }
+        public string city { get; set; }
+        public string state { get; set; }
+        public string zipCode { get; set; }
+        public string country { get; set; }
 
-        public string Designation { get; set; }
-        public string Team_HR_Head { get; set; }
-        public string Project_Manager { get; set; }
-        public string Team_Lead { get; set; }
+        public string designation { get; set; }
+        public string teamHRHead { get; set; }
+        public string projectManager { get; set; }
+        public string teamLead { get; set; }
 
-        public string Job_Title { get; set; }
-        public string Employment_Status { get; set; }
-        public DateTime Joined_Date { get; set; }
-        public string Skillset { get; set; }
+        public string jobTitle { get; set; }
+        public string employmentStatus { get; set; }
+        public DateTime joinedDate { get; set; }
+        public string skillset { get; set; }
 
-        public string Pay_Grade { get; set; }
-        public string Currency { get; set; }
-        public decimal Basic_Salary { get; set; }
-        public string Pay_Frequency { get; set; }
+        public string payGrade { get; set; }
+        public string currency { get; set; }
+        public decimal basicSalary { get; set; }
+        public string payFrequency { get; set; }
     }
 }

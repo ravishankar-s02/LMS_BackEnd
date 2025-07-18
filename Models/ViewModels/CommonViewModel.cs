@@ -2,10 +2,10 @@ namespace LMS.Models.ViewModels
 {
     public class CommonViewModel
     {
-        public long Id { get; set; }
-        public string Type { get; set; }
-        public string Code { get; set; }
-        public string ScreenName { get; set; }
-        public int DefaultFlag { get; set; }
+        public long id { get; set; }
+        public string type { get; set; }
+        public string code { get; set; }
+        public string screenName { get; set; }
+        public int defaultFlag { get; set; }
     }
 }

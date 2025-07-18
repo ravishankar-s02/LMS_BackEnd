@@ -2,38 +2,38 @@ namespace LMS.Models.ViewModels
 {
     public class EmployeeFullDetailsPUTViewModel
     {
-        public string EmployeeCode { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public DateTime DateOfBirth { get; set; }
-        public string Gender { get; set; }
-        public string MaritalStatus { get; set; }
-        public string Nationality { get; set; }
+        public string employeeCode { get; set; }
+        public string firstName { get; set; }
+        public string lastName { get; set; }
+        public DateTime dateOfBirth { get; set; }
+        public string gender { get; set; }
+        public string maritalStatus { get; set; }
+        public string nationality { get; set; }
 
-        public string PhoneNumber { get; set; }
-        public string AlternateNumber { get; set; }
-        public string Email { get; set; }
-        public string StreetAddress { get; set; }
-        public string City { get; set; }
-        public string State { get; set; }
-        public string ZipCode { get; set; }
-        public string Country { get; set; }
+        public string phoneNumber { get; set; }
+        public string alternateNumber { get; set; }
+        public string email { get; set; }
+        public string streetAddress { get; set; }
+        public string city { get; set; }
+        public string state { get; set; }
+        public string zipCode { get; set; }
+        public string country { get; set; }
 
-        public string Designation { get; set; }
-        public string TeamHRHead { get; set; }
-        public string ProjectManager { get; set; }
-        public string TeamLead { get; set; }
+        public string designation { get; set; }
+        public string teamHRHead { get; set; }
+        public string projectManager { get; set; }
+        public string teamLead { get; set; }
 
-        public string JobTitle { get; set; }
-        public string EmploymentStatus { get; set; }
-        public DateTime JoinDate { get; set; }
-        public string Skillset { get; set; }
+        public string jobTitle { get; set; }
+        public string employmentStatus { get; set; }
+        public DateTime joinDate { get; set; }
+        public string skillset { get; set; }
 
-        public string PayGrade { get; set; }
-        public string Currency { get; set; }
-        public decimal BasicSalary { get; set; }
-        public string PayFrequency { get; set; }
+        public string payGrade { get; set; }
+        public string currency { get; set; }
+        public decimal basicSalary { get; set; }
+        public string payFrequency { get; set; }
 
-        public string UpdatedUser { get; set; }
+        public string updatedUser { get; set; }
     }
 }

@@ -20,8 +20,8 @@ namespace LMS.Services
         {
             using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
             var parameters = new DynamicParameters();
-            parameters.Add("@UserName", request.UserName);
-            parameters.Add("@Password", request.Password);
+            parameters.Add("@UserName", request.userName);
+            parameters.Add("@Password", request.password);
             parameters.Add("@Status", dbType: DbType.Byte, direction: ParameterDirection.Output);
             parameters.Add("@ErrorMessage", dbType: DbType.String, size: 5000, direction: ParameterDirection.Output);
             parameters.Add("@OutJSON", dbType: DbType.String, size: int.MaxValue, direction: ParameterDirection.Output);
@@ -30,9 +30,9 @@ namespace LMS.Services
 
             return new LoginResponse
             {
-                Status = parameters.Get<byte>("@Status"),
-                ErrorMessage = parameters.Get<string>("@ErrorMessage"),
-                Result = parameters.Get<string>("@OutJSON")
+                status = parameters.Get<byte>("@Status"),
+                errorMessage = parameters.Get<string>("@ErrorMessage"),
+                result = parameters.Get<string>("@OutJSON")
             };
         }
     }

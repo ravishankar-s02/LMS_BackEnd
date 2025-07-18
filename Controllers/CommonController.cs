@@ -13,7 +13,7 @@ public class CommonController : ControllerBase
         _service = service;
     }
 
-    [HttpGet("code-type/{code}")]
+    [HttpGet("code-type/{type}")]
     public async Task<ActionResult<List<CommonViewModel>>> GetByType(string type)
     {
         var data = await _service.GetCommonByTypeAsync(type);

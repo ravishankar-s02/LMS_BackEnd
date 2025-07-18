@@ -25,13 +25,13 @@ namespace LMS.Services
                 "SS_ApplyLeave_SP",
                 new
                 {
-                    EmpFK = model.EmpFK,
-                    EmpCode = model.EmpCode,
-                    LeaveType = model.LeaveType,
-                    StartDate = model.StartDate,
-                    EndDate = model.EndDate,
-                    Reason = model.Reason,
-                    InsertedUser = model.InsertedUser
+                    EmpFK = model.empFK,
+                    EmpCode = model.empCode,
+                    LeaveType = model.leaveType,
+                    StartDate = model.startDate,
+                    EndDate = model.endDate,
+                    Reason = model.reason,
+                    InsertedUser = model.insertedUser
                 },
                 commandType: CommandType.StoredProcedure);
 

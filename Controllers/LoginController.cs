@@ -19,7 +19,7 @@ namespace LMS.Controllers
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
             var response = await _loginService.LoginAsync(request);
-            if (response.Status == 1)
+            if (response.status == 1)
                 return Ok(response);
             else
                 return Unauthorized(response);
