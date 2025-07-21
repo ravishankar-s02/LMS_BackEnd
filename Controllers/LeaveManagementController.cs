@@ -39,5 +39,25 @@ namespace LMS.Controllers
             var history = await _leaveManagementService.GetUsersLeaveHistoryAsync();
             return Ok(history);
         }
+
+        [HttpPut("update-leave")]
+        public async Task<IActionResult> UpdateLeave([FromBody] LeaveUpdateModel model)
+        {
+            var result = await _leaveManagementService.UpdateLeaveAsync(model);
+            if (result.Status == 1)
+                return Ok(new { result.Status, result.Message });
+            else
+                return BadRequest(new { result.Status, result.Message });
+        }
+
+        [HttpPut("delete-leave")]
+        public async Task<IActionResult> DeleteLeave([FromBody] LeaveDeleteModel model)
+        {
+            var result = await _leaveManagementService.DeleteLeaveAsync(model);
+            if (result.Status == 1)
+                return Ok(new { result.Status, result.Message });
+            else
+                return BadRequest(new { result.Status, result.Message });
+        }
     }
 }

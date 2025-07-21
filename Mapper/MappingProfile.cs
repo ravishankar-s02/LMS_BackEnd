@@ -21,6 +21,9 @@ namespace LMS.Mapper
             // Code master mapping
             CreateMap<CommonModel, CommonViewModel>();
 
+            // Code master mapping
+            CreateMap<TeamModel, TeamViewModel>();
+
             // Contact details mapping
             CreateMap<ContactDetailsModel, ContactDetailsViewModel>()
                 .ForMember(dest => dest.employeeId, opt => opt.MapFrom(src => src.SS_Emp_Code))
@@ -48,7 +51,7 @@ namespace LMS.Mapper
                 .ForMember(dest => dest.employmentStatus, opt => opt.MapFrom(src => src.Employment_Status))
                 .ForMember(dest => dest.joinedDate, opt => opt.MapFrom(src => src.Joined_Date))
                 .ForMember(dest => dest.skillset, opt => opt.MapFrom(src => src.Skillset));
-            
+
             // Salary details mapping
             CreateMap<SalaryDetailsModel, SalaryDetailsViewModel>()
                 .ForMember(dest => dest.empId, opt => opt.MapFrom(src => src.SS_Emp_Code))

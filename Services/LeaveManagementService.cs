@@ -56,5 +56,34 @@ namespace LMS.Services
 
             return result;
         }
+
+        public async Task<(int Status, string Message)> UpdateLeaveAsync(LeaveUpdateModel model)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@LeavePK", model.LeavePK);
+            parameters.Add("@EmpCode", model.EmpCode);
+            parameters.Add("@LeaveType", model.LeaveType);
+            parameters.Add("@StartDate", model.StartDate);
+            parameters.Add("@EndDate", model.EndDate);
+            parameters.Add("@Reason", model.Reason);
+            parameters.Add("@UpdatedUser", model.UpdatedUser);
+
+            var result = await _db.QueryFirstOrDefaultAsync<(int Status, string Message)>(
+                "SS_UpdateLeaveApplication_SP", parameters, commandType: CommandType.StoredProcedure);
+
+            return result;
+        }
+
+        public async Task<(int Status, string Message)> DeleteLeaveAsync(LeaveDeleteModel model)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@LeavePK", model.LeavePK);
+            parameters.Add("@EmpCode", model.EmpCode);
+
+            var result = await _db.QueryFirstOrDefaultAsync<(int, string)>(
+                "SS_DeleteLeaveApplication_SP", parameters, commandType: CommandType.StoredProcedure);
+
+            return result;
+        }
     }
 }

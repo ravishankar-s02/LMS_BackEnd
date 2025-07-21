@@ -19,4 +19,11 @@ public class CommonController : ControllerBase
         var data = await _service.GetCommonByTypeAsync(type);
         return Ok(data);
     }
+
+    [HttpGet("team-type/{type}")]
+    public async Task<ActionResult<List<TeamViewModel>>> GetByTeam(string type)
+    {
+        var data = await _service.GetCommonByTeamAsync(type);
+        return Ok(data);
+    }
 }
