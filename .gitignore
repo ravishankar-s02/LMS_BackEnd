@@ -1,0 +1,45 @@
+## Ignore build results
+*.dll
+*.exe
+bin/
+obj/
+
+## User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## OS generated files
+.DS_Store
+Thumbs.db
+
+## Visual Studio files
+.vscode/
+.vs/
+*.code-workspace
+
+## ASP.NET Secrets
+secrets.json
+
+## Logs
+*.log
+
+## Configuration files (optional - comment out if you need them in repo)
+appsettings.Development.json
+
+## IIS and publishing
+*.publishsettings
+*.dbmdl
+*.pfx
+*.psess
+*.vsp
+*.vspscc
+*.vssscc
+
+## Rider IDE files
+.idea/
+
+## Others
+*.swp
+*.tmp
