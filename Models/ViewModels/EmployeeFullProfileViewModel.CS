@@ -6,6 +6,7 @@ namespace LMS.Models.ViewModels
         public string empStatus { get; set; }
         public string firstName { get; set; }
         public string lastName { get; set; }
+        public string fullName { get; set; }
         public DateTime dateOfBirth { get; set; }
         public string gender { get; set; }
         public string maritalStatus { get; set; }
