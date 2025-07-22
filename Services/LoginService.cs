@@ -20,7 +20,7 @@ namespace LMS.Services
         {
             using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
             var parameters = new DynamicParameters();
-            parameters.Add("@UserName", request.userName);
+            parameters.Add("@EmpCode", request.empCode);
             parameters.Add("@Password", request.password);
             parameters.Add("@Status", dbType: DbType.Byte, direction: ParameterDirection.Output);
             parameters.Add("@ErrorMessage", dbType: DbType.String, size: 5000, direction: ParameterDirection.Output);

@@ -64,12 +64,12 @@ namespace LMS.Services.Interfaces
             throw new Exception(result.Message); // Or return result.Message back to controller
         }
 
-        public async Task<EmployeeFullProfileViewModel> GetEmployeeFullProfileAsync(string empCode)
+        public async Task<IEnumerable<EmployeeFullProfileViewModel>> GetEmployeeFullProfileAsync()
         {
-            using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-            var parameters = new { EmpCode = empCode };
-            var result = await connection.QueryFirstOrDefaultAsync<EmployeeFullProfileViewModel>(
-                "SS_GetEmployeeFullProfile_SP", parameters, commandType: CommandType.StoredProcedure);
+            var result = await _db.QueryAsync<EmployeeFullProfileViewModel>(
+                "SS_GetEmployeeFullProfile_SP",
+                commandType: CommandType.StoredProcedure);
+
             return result;
         }
 

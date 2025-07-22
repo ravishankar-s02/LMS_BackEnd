@@ -31,13 +31,10 @@ namespace LMS.Controllers
         }
 
         [HttpGet("view-employee-details")]
-        public async Task<ActionResult<EmployeeFullProfileViewModel>> GetEmployeeProfile(string empCode)
+        public async Task<IActionResult> GetEmployeeProfile()
         {
-            var profile = await _employeeService.GetEmployeeFullProfileAsync(empCode);
-            if (profile == null)
-                return NotFound("Employee not found");
-
-            return Ok(profile);
+            var history = await _employeeService.GetEmployeeFullProfileAsync();
+            return Ok(history);
         }
 
         [HttpPut("update-employee-details")]
