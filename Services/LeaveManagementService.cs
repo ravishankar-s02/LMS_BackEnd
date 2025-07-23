@@ -27,8 +27,8 @@ namespace LMS.Services
                 {
                     EmpCode = model.empCode,
                     LeaveType = model.leaveType,
-                    StartDate = model.startDate,
-                    EndDate = model.endDate,
+                    FromDate = model.fromDate,
+                    ToDate = model.toDate,
                     FromTime = model.fromTime,
                     ToTime = model.toTime,
                     TotalHours = model.totalHours,     // Pass from frontend
@@ -64,8 +64,8 @@ namespace LMS.Services
             parameters.Add("@LeavePK", model.LeavePK);
             parameters.Add("@EmpCode", model.empCode);
             parameters.Add("@LeaveType", model.LeaveType);
-            parameters.Add("@StartDate", model.StartDate);
-            parameters.Add("@EndDate", model.EndDate);
+            parameters.Add("@FromDate", model.fromDate);
+            parameters.Add("@ToDate", model.toDate);
             parameters.Add("@Reason", model.Reason);
 
             var result = await _db.QueryFirstOrDefaultAsync<(int Status, string Message)>(

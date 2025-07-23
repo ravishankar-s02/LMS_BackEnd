@@ -4,8 +4,8 @@ namespace LMS.Models.ViewModels
     {
         public string empCode { get; set; }
         public string leaveType { get; set; }
-        public DateTime startDate { get; set; }
-        public DateTime endDate { get; set; }
+        public DateTime fromDate { get; set; }
+        public DateTime toDate { get; set; }
         public TimeSpan? fromTime { get; set; }
         public TimeSpan? toTime { get; set; }
         public decimal? totalHours { get; set; }
