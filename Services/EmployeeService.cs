@@ -27,7 +27,7 @@ namespace LMS.Services.Interfaces
                 "SS_InsertFullEmployeeDetails_SP",
                 new
                 {
-                    model.employeeCode,
+                    model.empCode,
                     model.firstName,
                     model.lastName,
                     model.dateOfBirth,
@@ -53,8 +53,7 @@ namespace LMS.Services.Interfaces
                     model.payGrade,
                     model.currency,
                     model.basicSalary,
-                    model.payFrequency,
-                    model.insertedUser
+                    model.payFrequency
                 },
                 commandType: CommandType.StoredProcedure);
 
@@ -79,7 +78,7 @@ namespace LMS.Services.Interfaces
                 "SS_UpdateFullEmployeeDetails_SP",
                 new
                 {
-                    model.employeeCode,
+                    model.empCode,
                     model.firstName,
                     model.lastName,
                     model.dateOfBirth,
@@ -105,8 +104,7 @@ namespace LMS.Services.Interfaces
                     model.payGrade,
                     model.currency,
                     model.basicSalary,
-                    model.payFrequency,
-                    model.updatedUser
+                    model.payFrequency
                 },
                 commandType: CommandType.StoredProcedure);
 

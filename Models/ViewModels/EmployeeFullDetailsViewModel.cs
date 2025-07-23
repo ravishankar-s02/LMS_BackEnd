@@ -2,7 +2,7 @@ namespace LMS.Models.ViewModels
 {
     public class EmployeeFullDetailsViewModel
     {
-        public string employeeCode { get; set; }
+        public string empCode { get; set; }
         public string firstName { get; set; }
         public string lastName { get; set; }
         public DateTime dateOfBirth { get; set; }
@@ -33,7 +33,5 @@ namespace LMS.Models.ViewModels
         public string currency { get; set; }
         public decimal basicSalary { get; set; }
         public string payFrequency { get; set; }
-
-        public string insertedUser { get; set; }
     }
 }

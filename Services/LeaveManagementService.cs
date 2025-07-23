@@ -30,8 +30,7 @@ namespace LMS.Services
                     LeaveType = model.leaveType,
                     StartDate = model.startDate,
                     EndDate = model.endDate,
-                    Reason = model.reason,
-                    InsertedUser = model.insertedUser
+                    Reason = model.reason
                 },
                 commandType: CommandType.StoredProcedure);
 
@@ -61,12 +60,11 @@ namespace LMS.Services
         {
             var parameters = new DynamicParameters();
             parameters.Add("@LeavePK", model.LeavePK);
-            parameters.Add("@EmpCode", model.EmpCode);
+            parameters.Add("@EmpCode", model.empCode);
             parameters.Add("@LeaveType", model.LeaveType);
             parameters.Add("@StartDate", model.StartDate);
             parameters.Add("@EndDate", model.EndDate);
             parameters.Add("@Reason", model.Reason);
-            parameters.Add("@UpdatedUser", model.UpdatedUser);
 
             var result = await _db.QueryFirstOrDefaultAsync<(int Status, string Message)>(
                 "SS_UpdateLeaveApplication_SP", parameters, commandType: CommandType.StoredProcedure);
@@ -78,7 +76,7 @@ namespace LMS.Services
         {
             var parameters = new DynamicParameters();
             parameters.Add("@LeavePK", model.LeavePK);
-            parameters.Add("@EmpCode", model.EmpCode);
+            parameters.Add("@EmpCode", model.empCode);
 
             var result = await _db.QueryFirstOrDefaultAsync<(int, string)>(
                 "SS_DeleteLeaveApplication_SP", parameters, commandType: CommandType.StoredProcedure);

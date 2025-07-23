@@ -8,6 +8,5 @@ namespace LMS.Models.ViewModels
         public DateTime startDate { get; set; }
         public DateTime endDate { get; set; }
         public string reason { get; set; }
-        public string insertedUser { get; set; }
     }
 }
