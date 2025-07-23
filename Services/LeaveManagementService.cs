@@ -25,18 +25,20 @@ namespace LMS.Services
                 "SS_ApplyLeave_SP",
                 new
                 {
-                    EmpFK = model.empFK,
                     EmpCode = model.empCode,
                     LeaveType = model.leaveType,
                     StartDate = model.startDate,
                     EndDate = model.endDate,
+                    FromTime = model.fromTime,
+                    ToTime = model.toTime,
+                    TotalHours = model.totalHours,     // Pass from frontend
+                    Duration = model.duration,         // Pass from frontend
                     Reason = model.reason
                 },
                 commandType: CommandType.StoredProcedure);
 
             return result;
         }
-
         public async Task<IEnumerable<MyLeaveHistoryViewModel>> GetMyLeaveHistoryAsync(string empCode)
         {
             var result = await _db.QueryAsync<MyLeaveHistoryViewModel>(
