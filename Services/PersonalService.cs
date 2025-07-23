@@ -21,12 +21,12 @@ namespace LMS.Services
             _mapper = mapper;
         }
 
-        public async Task<EmployeeDetailsViewModel?> GetEmployeeDetailsByEmpIdAsync(string empId)
+        public async Task<EmployeeDetailsViewModel?> GetEmployeeDetailsByEmpIdAsync(string empCode)
         {
             using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
 
             var parameters = new DynamicParameters();
-            parameters.Add("@SS_Emp_ID", empId);
+            parameters.Add("@SS_Emp_Code", empCode);
 
             var result = await connection.QueryFirstOrDefaultAsync<EmployeeDetailsModel>(
                 "SS_GetEmployeeDetailsByEmpId_SP",
@@ -37,12 +37,12 @@ namespace LMS.Services
             return result == null ? null : _mapper.Map<EmployeeDetailsViewModel>(result);
         }
 
-        public async Task<ContactDetailsViewModel?> GetContactDetailsByEmpIdAsync(string empId)
+        public async Task<ContactDetailsViewModel?> GetContactDetailsByEmpIdAsync(string empCode)
         {
             using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
 
             var parameters = new DynamicParameters();
-            parameters.Add("@SS_Emp_ID", empId);
+            parameters.Add("@SS_Emp_Code", empCode);
 
             var result = await connection.QueryFirstOrDefaultAsync<ContactDetailsModel>(
                 "SS_GetContactDetailsByEmpId_SP",
@@ -53,12 +53,12 @@ namespace LMS.Services
             return result == null ? null : _mapper.Map<ContactDetailsViewModel>(result);
         }
 
-        public async Task<TeamDetailsViewModel?> GetTeamDetailsByEmpIdAsync(string empId)
+        public async Task<TeamDetailsViewModel?> GetTeamDetailsByEmpIdAsync(string empCode)
         {
             using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
 
             var parameters = new DynamicParameters();
-            parameters.Add("@SS_Emp_ID", empId);
+            parameters.Add("@SS_Emp_Code", empCode);
 
             var result = await connection.QueryFirstOrDefaultAsync<TeamDetailsModel>(
                 "SS_GetTeamDetailsByEmpId_SP",

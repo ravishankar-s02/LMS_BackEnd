@@ -2,7 +2,7 @@ namespace LMS.Models.ViewModels
 {
     public class ContactDetailsViewModel
     {
-        public string employeeId { get; set; }
+        public string empCode { get; set; }
         public string phoneNumber { get; set; }
         public string alternateNumber { get; set; }
         public string email { get; set; }

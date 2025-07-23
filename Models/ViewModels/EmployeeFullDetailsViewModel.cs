@@ -5,7 +5,7 @@ namespace LMS.Models.ViewModels
         public string empCode { get; set; }
         public string firstName { get; set; }
         public string lastName { get; set; }
-        public DateTime dateOfBirth { get; set; }
+        public string dateOfBirth { get; set; }
         public string gender { get; set; }
         public string maritalStatus { get; set; }
         public string nationality { get; set; }
@@ -26,7 +26,7 @@ namespace LMS.Models.ViewModels
 
         public string jobTitle { get; set; }
         public string employmentStatus { get; set; }
-        public DateTime joinDate { get; set; }
+        public string joinedDate { get; set; }
         public string skillset { get; set; }
 
         public string payGrade { get; set; }

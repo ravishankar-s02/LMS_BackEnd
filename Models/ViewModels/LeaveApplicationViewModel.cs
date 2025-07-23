@@ -8,8 +8,8 @@ namespace LMS.Models.ViewModels
         public DateTime endDate { get; set; }
         public TimeSpan? fromTime { get; set; }
         public TimeSpan? toTime { get; set; }
-        public decimal? totalHours { get; set; }       // New
-        public string duration { get; set; }           // New
+        public decimal? totalHours { get; set; }
+        public string duration { get; set; }   
         public string reason { get; set; }
     }
 }

@@ -2,7 +2,7 @@ namespace LMS.Models.ViewModels
 {
     public class EmployeeDetailsViewModel
     {
-        public string employeeId { get; set; }
+        public string empCode { get; set; }
         public string fullName => $"{firstName} {lastName}".Trim();
         public string firstName { get; set; }
         public string lastName { get; set; }
