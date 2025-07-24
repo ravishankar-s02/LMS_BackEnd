@@ -29,7 +29,7 @@ namespace LMS.Services
             parameters.Add("@SS_Emp_Code", empCode);
 
             var result = await connection.QueryFirstOrDefaultAsync<EmployeeDetailsModel>(
-                "SS_GetEmployeeDetailsByEmpId_SP",
+                "SS_EmployeeDetails_SP",
                 parameters,
                 commandType: CommandType.StoredProcedure
             );
@@ -45,7 +45,7 @@ namespace LMS.Services
             parameters.Add("@SS_Emp_Code", empCode);
 
             var result = await connection.QueryFirstOrDefaultAsync<ContactDetailsModel>(
-                "SS_GetContactDetailsByEmpId_SP",
+                "SS_ContactDetails_SP",
                 parameters,
                 commandType: CommandType.StoredProcedure
             );
@@ -61,7 +61,7 @@ namespace LMS.Services
             parameters.Add("@SS_Emp_Code", empCode);
 
             var result = await connection.QueryFirstOrDefaultAsync<TeamDetailsModel>(
-                "SS_GetTeamDetailsByEmpId_SP",
+                "SS_TeamDetails_SP",
                 parameters,
                 commandType: CommandType.StoredProcedure
             );
