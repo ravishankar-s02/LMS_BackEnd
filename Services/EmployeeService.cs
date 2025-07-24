@@ -7,6 +7,8 @@ using LMS.Models.DataModels;
 using LMS.Models.ViewModels;
 using LMS.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
+using BCrypt.Net;
+
 
 namespace LMS.Services.Interfaces
 {
@@ -20,6 +22,48 @@ namespace LMS.Services.Interfaces
             _configuration = config;
             _db = new SqlConnection(config.GetConnectionString("DefaultConnection"));
         }
+
+        // public async Task<bool> InsertFullEmployeeDetails(EmployeeFullDetailsViewModel model)
+        // {
+        //     var result = await _db.QueryFirstOrDefaultAsync<(int Status, string Message)>(
+        //         "SS_InsertFullEmployeeDetails_SP",
+        //         new
+        //         {
+        //             model.empCode,
+        //             model.firstName,
+        //             model.lastName,
+        //             model.dateOfBirth,
+        //             model.gender,
+        //             model.maritalStatus,
+        //             model.nationality,
+        //             model.phoneNumber,
+        //             model.alternateNumber,
+        //             model.email,
+        //             model.streetAddress,
+        //             model.city,
+        //             model.state,
+        //             model.zipCode,
+        //             model.country,
+        //             model.designation,
+        //             model.teamHRHead,
+        //             model.projectManager,
+        //             model.teamLead,
+        //             model.jobTitle,
+        //             model.employmentStatus,
+        //             model.joinedDate,
+        //             model.skillset,
+        //             model.payGrade,
+        //             model.currency,
+        //             model.basicSalary,
+        //             model.payFrequency
+        //         },
+        //         commandType: CommandType.StoredProcedure);
+
+        //     if (result.Status == 1)
+        //         return true;
+
+        //     throw new Exception(result.Message); // Or return result.Message back to controller
+        // }
 
         public async Task<bool> InsertFullEmployeeDetails(EmployeeFullDetailsViewModel model)
         {
@@ -58,10 +102,28 @@ namespace LMS.Services.Interfaces
                 commandType: CommandType.StoredProcedure);
 
             if (result.Status == 1)
-                return true;
+            {
+                // Hash default password
+                string plainPassword = "Welcome@123";
+                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(plainPassword);
 
-            throw new Exception(result.Message); // Or return result.Message back to controller
+                // Insert into login table
+                string insertLoginQuery = @"
+                    INSERT INTO SS_Registered_Login (Login_Email_ID, Login_Password, Login_Status)
+                    VALUES (@Email, @HashedPassword, 'Active')";
+
+                await _db.ExecuteAsync(insertLoginQuery, new
+                {
+                    Email = model.email,
+                    HashedPassword = hashedPassword
+                });
+
+                return true;
+            }
+
+            throw new Exception(result.Message);
         }
+
 
         public async Task<IEnumerable<EmployeeFullProfileViewModel>> GetEmployeeFullProfileAsync()
         {
