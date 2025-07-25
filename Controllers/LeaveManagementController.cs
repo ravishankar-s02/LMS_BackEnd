@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using LMS.Models.ViewModels;
 using LMS.Services.Interfaces;
+using LMS.Models.DataModels;
+
 
 namespace LMS.Controllers
 {
@@ -16,15 +18,47 @@ namespace LMS.Controllers
             _leaveManagementService = leaveManagementService;
         }
 
+        // [HttpPost("apply")]
+        // public async Task<IActionResult> ApplyLeave([FromBody] LeaveApplicationViewModel model)
+        // {
+        //     var (status, message) = await _leaveManagementService.ApplyLeaveAsync(model);
+        //     if (status == 1)
+        //         return Ok(new { message });
+
+        //     return BadRequest(new { message });
+        // }
         [HttpPost("apply")]
         public async Task<IActionResult> ApplyLeave([FromBody] LeaveApplicationViewModel model)
         {
-            var (status, message) = await _leaveManagementService.ApplyLeaveAsync(model);
+            // Convert fromTime and toTime from string to TimeSpan?
+            TimeSpan? parsedFromTime = TimeSpan.TryParse(model.fromTime, out var ft) ? ft : (TimeSpan?)null;
+            TimeSpan? parsedToTime = TimeSpan.TryParse(model.toTime, out var tt) ? tt : (TimeSpan?)null;
+
+            // Convert totalHours from string to decimal?
+            decimal? parsedTotalHours = decimal.TryParse(model.totalHours, out var th) ? th : (decimal?)null;
+
+            // Prepare data model to pass to service
+            var dataModel = new LeaveApplicationModel
+            {
+                EmpCode = model.empCode,
+                LeaveType = model.leaveType,
+                FromDate = model.fromDate,
+                ToDate = model.toDate,
+                FromTime = parsedFromTime,
+                ToTime = parsedToTime,
+                TotalHours = parsedTotalHours,
+                Duration = model.duration,
+                Reason = model.reason
+            };
+
+            var (status, message) = await _leaveManagementService.ApplyLeaveAsync(dataModel);
+
             if (status == 1)
                 return Ok(new { message });
 
             return BadRequest(new { message });
         }
+
 
         [HttpGet("my-history")]
         public async Task<IActionResult> GetMyLeaveHistory(string empCode)

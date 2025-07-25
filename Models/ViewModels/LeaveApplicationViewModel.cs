@@ -6,10 +6,10 @@ namespace LMS.Models.ViewModels
         public string leaveType { get; set; }
         public DateTime fromDate { get; set; }
         public DateTime toDate { get; set; }
-        public TimeSpan? fromTime { get; set; }
-        public TimeSpan? toTime { get; set; }
-        public decimal? totalHours { get; set; }
-        public string duration { get; set; }   
+        public string fromTime { get; set; }   
+        public string toTime { get; set; }     
+        public string totalHours { get; set; } 
+        public string duration { get; set; }
         public string reason { get; set; }
     }
 }

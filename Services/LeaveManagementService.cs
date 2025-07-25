@@ -19,21 +19,21 @@ namespace LMS.Services
             _db = new SqlConnection(configuration.GetConnectionString("DefaultConnection"));
         }
 
-        public async Task<(int Status, string Message)> ApplyLeaveAsync(LeaveApplicationViewModel model)
+        public async Task<(int Status, string Message)> ApplyLeaveAsync(LeaveApplicationModel model)
         {
             var result = await _db.QueryFirstOrDefaultAsync<(int, string)>(
                 "SS_ApplyLeave_SP",
                 new
                 {
-                    EmpCode = model.empCode,
-                    LeaveType = model.leaveType,
-                    FromDate = model.fromDate,
-                    ToDate = model.toDate,
-                    FromTime = model.fromTime,
-                    ToTime = model.toTime,
-                    TotalHours = model.totalHours,     // Pass from frontend
-                    Duration = model.duration,         // Pass from frontend
-                    Reason = model.reason
+                    EmpCode = model.EmpCode,
+                    LeaveType = model.LeaveType,
+                    FromDate = model.FromDate,
+                    ToDate = model.ToDate,
+                    FromTime = model.FromTime,
+                    ToTime = model.ToTime,
+                    TotalHours = model.TotalHours,     // Pass from frontend
+                    Duration = model.Duration,         // Pass from frontend
+                    Reason = model.Reason
                 },
                 commandType: CommandType.StoredProcedure);
 
