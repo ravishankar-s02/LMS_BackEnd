@@ -61,12 +61,12 @@ namespace LMS.Services
         public async Task<(int Status, string Message)> UpdateLeaveAsync(LeaveUpdateModel model)
         {
             var parameters = new DynamicParameters();
-            parameters.Add("@LeavePK", model.LeavePK);
+            parameters.Add("@LeavePK", model.leaveId);
             parameters.Add("@EmpCode", model.empCode);
-            parameters.Add("@LeaveType", model.LeaveType);
+            parameters.Add("@LeaveType", model.leaveType);
             parameters.Add("@FromDate", model.fromDate);
             parameters.Add("@ToDate", model.toDate);
-            parameters.Add("@Reason", model.Reason);
+            parameters.Add("@Reason", model.reason);
 
             var result = await _db.QueryFirstOrDefaultAsync<(int Status, string Message)>(
                 "SS_UpdateLeaveApplication_SP", parameters, commandType: CommandType.StoredProcedure);
@@ -77,7 +77,7 @@ namespace LMS.Services
         public async Task<(int Status, string Message)> DeleteLeaveAsync(LeaveDeleteModel model)
         {
             var parameters = new DynamicParameters();
-            parameters.Add("@LeavePK", model.LeavePK);
+            parameters.Add("@LeavePK", model.leaveId);
             parameters.Add("@EmpCode", model.empCode);
 
             var result = await _db.QueryFirstOrDefaultAsync<(int, string)>(
