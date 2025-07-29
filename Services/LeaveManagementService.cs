@@ -67,6 +67,7 @@ namespace LMS.Services
             parameters.Add("@FromDate", model.fromDate);
             parameters.Add("@ToDate", model.toDate);
             parameters.Add("@Reason", model.reason);
+            parameters.Add("@Duration", model.duration);
 
             var result = await _db.QueryFirstOrDefaultAsync<(int Status, string Message)>(
                 "SS_UpdateLeaveApplication_SP", parameters, commandType: CommandType.StoredProcedure);

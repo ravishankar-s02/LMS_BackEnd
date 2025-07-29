@@ -33,5 +33,6 @@ namespace LMS.Models.ViewModels
         public string currency { get; set; }
         public decimal basicSalary { get; set; }
         public string payFrequency { get; set; }
+        public string empStatus { get; set; }
     }
 }

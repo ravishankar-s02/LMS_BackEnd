@@ -9,5 +9,6 @@ namespace LMS.Models.ViewModels
         public string duration { get; set; }
         public string leaveStatus { get; set; }
         public string reason { get; set; }
+        public string fullName { get; set; }
     }
 }

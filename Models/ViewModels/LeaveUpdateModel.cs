@@ -8,6 +8,7 @@ namespace LMS.Models.ViewModels
         public DateTime fromDate { get; set; }
         public DateTime toDate { get; set; }
         public string reason { get; set; }
+        public string duration { get; set; }
     }
 
 }

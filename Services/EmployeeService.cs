@@ -104,7 +104,8 @@ namespace LMS.Services.Interfaces
                     model.payGrade,
                     model.currency,
                     model.basicSalary,
-                    model.payFrequency
+                    model.payFrequency,
+                    model.empStatus
                 },
                 commandType: CommandType.StoredProcedure);
 

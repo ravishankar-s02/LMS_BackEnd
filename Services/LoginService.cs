@@ -4,6 +4,7 @@ using System.Data;
 using LMS.Models.ViewModels;
 using LMS.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 
 namespace LMS.Services
 {
@@ -28,11 +29,22 @@ namespace LMS.Services
 
             await connection.ExecuteAsync("SS_EmployeeLogin_SP", parameters, commandType: CommandType.StoredProcedure);
 
+            var status = parameters.Get<byte>("@Status");
+            var errorMessage = parameters.Get<string>("@ErrorMessage");
+            var outJson = parameters.Get<string>("@OutJSON");
+
+            LoginUserDetails userDetails = null;
+
+            if (!string.IsNullOrEmpty(outJson))
+            {
+                userDetails = JsonConvert.DeserializeObject<LoginUserDetails>(outJson);
+            }
+
             return new LoginResponse
             {
-                status = parameters.Get<byte>("@Status"),
-                errorMessage = parameters.Get<string>("@ErrorMessage"),
-                result = parameters.Get<string>("@OutJSON")
+                status = status,
+                errorMessage = errorMessage,
+                result = userDetails
             };
         }
     }
