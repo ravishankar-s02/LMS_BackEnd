@@ -37,18 +37,32 @@ namespace LMS.Controllers
             return Ok(history);
         }
 
+        // [HttpPut("update-employee-details")]
+        // public async Task<IActionResult> UpdateEmployeeProfile([FromBody] EmployeeFullDetailsPUTViewModel model)
+        // {
+        //     try
+        //     {
+        //         var result = await _employeeService.UpdateFullEmployeeDetailsPUTAsync(model);
+        //         return result ? Ok("Profile updated successfully") : BadRequest("Update failed");
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         return StatusCode(500, ex.Message);
+        //     }
+        // }
         [HttpPut("update-employee-details")]
         public async Task<IActionResult> UpdateEmployeeProfile([FromBody] EmployeeFullDetailsPUTViewModel model)
         {
             try
             {
-                var result = await _employeeService.UpdateFullEmployeeDetailsPUTAsync(model);
-                return result ? Ok("Profile updated successfully") : BadRequest("Update failed");
+                var updatedEmployee = await _employeeService.UpdateFullEmployeeDetailsPUTAsync(model);
+                return Ok(updatedEmployee);  // return the full updated details
             }
             catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
             }
         }
+
     }
 }
