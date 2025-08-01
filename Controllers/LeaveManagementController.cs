@@ -93,5 +93,12 @@ namespace LMS.Controllers
             else
                 return BadRequest(new { result.Status, result.Message });
         }
+
+        [HttpGet("leave-action")]
+        public async Task<IActionResult> GetLeaveAction()
+        {
+            var history = await _leaveManagementService.GetLeaveActionAsync();
+            return Ok(history);
+        }
     }
 }

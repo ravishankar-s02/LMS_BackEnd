@@ -86,5 +86,14 @@ namespace LMS.Services
 
             return result;
         }
+
+        public async Task<IEnumerable<LeaveActionViewModel>> GetLeaveActionAsync()
+        {
+            var result = await _db.QueryAsync<LeaveActionViewModel>(
+                "SS_LeaveAction_SP",
+                commandType: CommandType.StoredProcedure);
+
+            return result;
+        }
     }
 }

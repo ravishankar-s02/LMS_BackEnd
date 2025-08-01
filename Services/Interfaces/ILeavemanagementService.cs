@@ -11,5 +11,6 @@ namespace LMS.Services.Interfaces
         Task<IEnumerable<UsersLeaveHistoryViewModel>> GetUsersLeaveHistoryAsync();
         Task<(int Status, string Message)> UpdateLeaveAsync(LeaveUpdateModel model);
         Task<(int Status, string Message)> DeleteLeaveAsync(LeaveDeleteModel model);
+        Task<IEnumerable<LeaveActionViewModel>> GetLeaveActionAsync();
     }
 }
