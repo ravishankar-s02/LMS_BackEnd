@@ -31,8 +31,8 @@ namespace LMS.Services
                     ToDate = model.ToDate,
                     FromTime = model.FromTime,
                     ToTime = model.ToTime,
-                    TotalHours = model.TotalHours,     // Pass from frontend
-                    Duration = model.Duration,         // Pass from frontend
+                    TotalHours = model.TotalHours,  
+                    Duration = model.Duration,      
                     Reason = model.Reason
                 },
                 commandType: CommandType.StoredProcedure);
