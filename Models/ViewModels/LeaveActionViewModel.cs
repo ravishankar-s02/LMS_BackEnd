@@ -4,6 +4,7 @@ namespace LMS.Models.ViewModels
     {
         public string fullName { get; set; }
         public string designation { get; set; }
+        public int LeavePK { get; set; }
         public string leaveType { get; set; }
         public string duration { get; set; }
         public string Reason { get; set; }
