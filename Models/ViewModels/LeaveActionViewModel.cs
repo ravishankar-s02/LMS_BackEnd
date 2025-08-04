@@ -10,6 +10,6 @@ namespace LMS.Models.ViewModels
         public string reason { get; set; }
         public DateTime fromDate { get; set; }
         public DateTime toDate { get; set; }
-        public int editVersion { get; set; }
+        public string leaveStatus { get; set; }
     }
 }

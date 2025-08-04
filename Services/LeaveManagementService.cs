@@ -96,27 +96,15 @@ namespace LMS.Services
             return result;
         }
 
-        public async Task<(int Status, string Message)> UpdateLeaveStatusAsync(long leavePK, string action)
+        public async Task<IEnumerable<LeaveActionViewModel>> UpdateLeaveActionAsync(LeaveActionRequestModel model)
         {
             var parameters = new DynamicParameters();
-            parameters.Add("@LeavePK", leavePK);
-            parameters.Add("@Action", action);
-            parameters.Add("@StatusCode", dbType: DbType.Int32, direction: ParameterDirection.Output);
-            parameters.Add("@Message", dbType: DbType.String, size: 500, direction: ParameterDirection.Output);
+            parameters.Add("@LeavePK", model.LeavePK);
+            parameters.Add("@Action", model.Action?.ToUpper());
 
-            await _db.ExecuteAsync("SS_UpdateLeaveStatus_SP", parameters, commandType: CommandType.StoredProcedure);
-
-            var statusCode = parameters.Get<int>("@StatusCode");
-            var message = parameters.Get<string>("@Message");
-
-            return (statusCode, message);
-        }
-
-        public async Task<LeaveActionViewModel> GetLeaveApplicationByIdAsync(long leavePK)
-        {
-            var result = await _db.QueryFirstOrDefaultAsync<LeaveActionViewModel>(
-                "SS_GetLeaveApplicationById_SP",
-                new { LeavePK = leavePK },
+            var result = await _db.QueryAsync<LeaveActionViewModel>(
+                "SS_LeaveAction_SP",
+                parameters,
                 commandType: CommandType.StoredProcedure);
 
             return result;

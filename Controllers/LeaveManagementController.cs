@@ -94,25 +94,18 @@ namespace LMS.Controllers
                 return BadRequest(new { result.Status, result.Message });
         }
 
-        [HttpPost("leave-action")]
-        public async Task<IActionResult> LeaveAction([FromBody] LeaveActionRequestModel model)
+        [HttpGet("leave-action")]
+        public async Task<IActionResult> GetLeaveAction()
         {
-            var updatedBy = "SimpleInspire"; // or get from JWT context
+            var history = await _leaveManagementService.GetLeaveActionAsync();
+            return Ok(history);
+        }
 
-            var (status, message) = await _leaveManagementService.UpdateLeaveStatusAsync(model.LeavePK, model.Action);
-
-            if (status != 1)
-            {
-                return BadRequest(message);
-            }
-
-            var leaveData = await _leaveManagementService.GetLeaveApplicationByIdAsync(model.LeavePK);
-            if (leaveData == null)
-            {
-                return NotFound("Leave application not found after update.");
-            }
-
-            return Ok(leaveData);
+        [HttpPost("leave-action/update")]
+        public async Task<IActionResult> UpdateLeaveAction([FromBody] LeaveActionRequestModel model)
+        {
+            var updatedList = await _leaveManagementService.UpdateLeaveActionAsync(model);
+            return Ok(updatedList);
         }
     }
 }
