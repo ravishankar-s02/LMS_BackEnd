@@ -24,6 +24,8 @@ builder.Services.AddScoped<ICommonService, CommonService>();
 builder.Services.AddScoped<IEmploymentService, EmploymentService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<ILeaveManagementService, LeaveManagementService>();
+builder.Services.AddScoped<IGooseMenuService, GooseMenuService>();
+
 
 // 4. AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));
