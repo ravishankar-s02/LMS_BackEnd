@@ -12,5 +12,7 @@ namespace LMS.Services.Interfaces
         Task<(int Status, string Message)> UpdateLeaveAsync(LeaveUpdateModel model);
         Task<(int Status, string Message)> DeleteLeaveAsync(LeaveDeleteModel model);
         Task<IEnumerable<LeaveActionViewModel>> GetLeaveActionAsync();
+        Task<(int Status, string Message)> UpdateLeaveStatusAsync(long leavePK, string action);
+        Task<LeaveActionViewModel> GetLeaveApplicationByIdAsync(long leavePK);
     }
 }

@@ -95,5 +95,31 @@ namespace LMS.Services
 
             return result;
         }
+
+        public async Task<(int Status, string Message)> UpdateLeaveStatusAsync(long leavePK, string action)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@LeavePK", leavePK);
+            parameters.Add("@Action", action);
+            parameters.Add("@StatusCode", dbType: DbType.Int32, direction: ParameterDirection.Output);
+            parameters.Add("@Message", dbType: DbType.String, size: 500, direction: ParameterDirection.Output);
+
+            await _db.ExecuteAsync("SS_UpdateLeaveStatus_SP", parameters, commandType: CommandType.StoredProcedure);
+
+            var statusCode = parameters.Get<int>("@StatusCode");
+            var message = parameters.Get<string>("@Message");
+
+            return (statusCode, message);
+        }
+
+        public async Task<LeaveActionViewModel> GetLeaveApplicationByIdAsync(long leavePK)
+        {
+            var result = await _db.QueryFirstOrDefaultAsync<LeaveActionViewModel>(
+                "SS_GetLeaveApplicationById_SP",
+                new { LeavePK = leavePK },
+                commandType: CommandType.StoredProcedure);
+
+            return result;
+        }
     }
 }
