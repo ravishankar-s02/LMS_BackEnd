@@ -1,27 +1,49 @@
 using System.Data;
 using System.Threading.Tasks;
 using Dapper;
+using LMS.Models.ViewModels;
 using LMS.Services.Interfaces;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 
-public class GooseMenuService : IGooseMenuService
+namespace LMS.Services
 {
-    private readonly IConfiguration _configuration;
-
-    public GooseMenuService(IConfiguration configuration)
+    public class GooseMenuService : IGooseMenuService
     {
-        _configuration = configuration;
-    }
+        private readonly IConfiguration _configuration;
 
-    public async Task<string> GetGooseMenuJsonAsync()
-    {
-        using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-        var result = await connection.QueryFirstOrDefaultAsync<string>(
-            "SS_GetGooseMenu_Hierarchical_JSON_SP",
-            commandType: CommandType.StoredProcedure
-        );
+        public GooseMenuService(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
 
-        return result ?? "{}"; // Return empty JSON object if null
+        public async Task<GooseMenuGroupedJsonModel> GetHierarchicalMenuAsync(string empCode)
+        {
+            var connectionString = _configuration.GetConnectionString("DefaultConnection");
+
+            using var connection = new SqlConnection(connectionString);
+            var parameters = new DynamicParameters();
+            parameters.Add("@SS_Emp_Code", empCode);
+
+            await connection.OpenAsync();
+
+            var result = await connection.QueryFirstOrDefaultAsync<string>(
+                "SS_GetGooseMenu_Hierarchical_JSON_SP",
+                parameters,
+                commandType: CommandType.StoredProcedure
+            );
+
+            if (string.IsNullOrWhiteSpace(result))
+            {
+                return new GooseMenuGroupedJsonModel
+                {
+                    MAINMENU = new(),
+                    BOTTOMMENU = new()
+                };
+            }
+
+            return JsonConvert.DeserializeObject<GooseMenuGroupedJsonModel>(result);
+        }
     }
 }

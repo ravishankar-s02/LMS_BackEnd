@@ -1,22 +1,30 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 using LMS.Services.Interfaces;
+using LMS.Models.ViewModels;
+using System.Threading.Tasks;
 
-[ApiController]
-[Route("api/[controller]")]
-public class GooseMenuController : ControllerBase
+namespace LMS.Controllers
 {
-    private readonly IGooseMenuService _gooseMenuService;
-
-    public GooseMenuController(IGooseMenuService gooseMenuService)
+    [ApiController]
+    [Route("api/[controller]")]
+    public class GooseMenuController : ControllerBase
     {
-        _gooseMenuService = gooseMenuService;
-    }
+        private readonly IGooseMenuService _menuService;
 
-    [HttpGet("hierarchical")]
-    public async Task<IActionResult> GetHierarchicalMenu()
-    {
-        var json = await _gooseMenuService.GetGooseMenuJsonAsync();
-        return Content(json, "application/json"); // Direct JSON response
+        public GooseMenuController(IGooseMenuService menuService)
+        {
+            _menuService = menuService;
+        }
+
+        [HttpGet("hierarchical-menu/{empCode}")]
+        public async Task<ActionResult<GooseMenuGroupedJsonModel>> GetHierarchicalMenu(string empCode)
+        {
+            var result = await _menuService.GetHierarchicalMenuAsync(empCode);
+
+            if (result == null)
+                return NotFound("No menu found for the employee.");
+
+            return Ok(result);
+        }
     }
 }
