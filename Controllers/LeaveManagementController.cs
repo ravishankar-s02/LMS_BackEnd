@@ -86,7 +86,7 @@ namespace LMS.Controllers
         }
 
         [HttpGet("leave-action/{empCode}")]
-        public async Task<IActionResult> GetLeaveAction([FromQuery] string empCode)
+        public async Task<IActionResult> GetLeaveAction([FromRoute] string empCode)
         {
             if (string.IsNullOrWhiteSpace(empCode))
                 return BadRequest("empCode is required.");
@@ -94,7 +94,6 @@ namespace LMS.Controllers
             var history = await _leaveManagementService.GetLeaveActionAsync(empCode);
             return Ok(history);
         }
-
 
         [HttpPost("leave-action/update")]
         public async Task<IActionResult> UpdateLeaveAction([FromBody] LeaveActionRequestModel model)
