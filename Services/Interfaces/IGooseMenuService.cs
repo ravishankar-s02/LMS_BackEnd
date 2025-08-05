@@ -5,6 +5,6 @@ namespace LMS.Services.Interfaces
 {
     public interface IGooseMenuService
     {
-        Task<Dictionary<string, List<GooseMasterMenu>>> GetGooseMenuAsync();
+        Task<string> GetGooseMenuJsonAsync();
     }
 }
