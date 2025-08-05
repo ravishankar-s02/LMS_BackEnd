@@ -85,7 +85,7 @@ namespace LMS.Controllers
                 return BadRequest(new { result.Status, result.Message });
         }
 
-        [HttpGet("leave-action")]
+        [HttpGet("leave-action/{empCode}")]
         public async Task<IActionResult> GetLeaveAction([FromQuery] string empCode)
         {
             if (string.IsNullOrWhiteSpace(empCode))
