@@ -18,15 +18,6 @@ namespace LMS.Controllers
             _leaveManagementService = leaveManagementService;
         }
 
-        // [HttpPost("apply")]
-        // public async Task<IActionResult> ApplyLeave([FromBody] LeaveApplicationViewModel model)
-        // {
-        //     var (status, message) = await _leaveManagementService.ApplyLeaveAsync(model);
-        //     if (status == 1)
-        //         return Ok(new { message });
-
-        //     return BadRequest(new { message });
-        // }
         [HttpPost("apply")]
         public async Task<IActionResult> ApplyLeave([FromBody] LeaveApplicationViewModel model)
         {
@@ -67,10 +58,10 @@ namespace LMS.Controllers
             return Ok(history);
         }
 
-        [HttpGet("users-history")]
-        public async Task<IActionResult> GetUsersLeaveHistory()
+        [HttpGet("users-history/{empCode}")]
+        public async Task<IActionResult> GetUsersLeaveHistory(string empCode)
         {
-            var history = await _leaveManagementService.GetUsersLeaveHistoryAsync();
+            var history = await _leaveManagementService.GetUsersLeaveHistoryAsync(empCode);
             return Ok(history);
         }
 
@@ -95,11 +86,15 @@ namespace LMS.Controllers
         }
 
         [HttpGet("leave-action")]
-        public async Task<IActionResult> GetLeaveAction()
+        public async Task<IActionResult> GetLeaveAction([FromQuery] string empCode)
         {
-            var history = await _leaveManagementService.GetLeaveActionAsync();
+            if (string.IsNullOrWhiteSpace(empCode))
+                return BadRequest("empCode is required.");
+
+            var history = await _leaveManagementService.GetLeaveActionAsync(empCode);
             return Ok(history);
         }
+
 
         [HttpPost("leave-action/update")]
         public async Task<IActionResult> UpdateLeaveAction([FromBody] LeaveActionRequestModel model)

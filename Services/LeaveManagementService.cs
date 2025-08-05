@@ -49,11 +49,16 @@ namespace LMS.Services
             return result;
         }
 
-        public async Task<IEnumerable<UsersLeaveHistoryViewModel>> GetUsersLeaveHistoryAsync()
+        public async Task<IEnumerable<UsersLeaveHistoryViewModel>> GetUsersLeaveHistoryAsync(string empCode)
         {
+            var parameters = new DynamicParameters();
+            parameters.Add("@SS_Emp_Code", empCode);
+
             var result = await _db.QueryAsync<UsersLeaveHistoryViewModel>(
                 "SS_GetUsersLeaveHistory_SP",
-                commandType: CommandType.StoredProcedure);
+                parameters,
+                commandType: CommandType.StoredProcedure
+            );
 
             return result;
         }
@@ -87,14 +92,19 @@ namespace LMS.Services
             return result;
         }
 
-        public async Task<IEnumerable<LeaveActionViewModel>> GetLeaveActionAsync()
+        public async Task<IEnumerable<LeaveActionViewModel>> GetLeaveActionAsync(string empCode)
         {
+            var parameters = new DynamicParameters();
+            parameters.Add("@SS_Emp_Code", empCode);
+
             var result = await _db.QueryAsync<LeaveActionViewModel>(
                 "SS_LeaveAction_SP",
+                parameters,
                 commandType: CommandType.StoredProcedure);
 
             return result;
         }
+
 
         public async Task<IEnumerable<LeaveActionViewModel>> UpdateLeaveActionAsync(LeaveActionRequestModel model)
         {
