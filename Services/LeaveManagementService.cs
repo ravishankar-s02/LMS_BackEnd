@@ -111,6 +111,7 @@ namespace LMS.Services
             var parameters = new DynamicParameters();
             parameters.Add("@LeavePK", model.LeavePK);
             parameters.Add("@Action", model.Action?.ToUpper());
+            parameters.Add("@SS_Emp_Code", model.EmpCode);  // 👈 Add this line
 
             var result = await _db.QueryAsync<LeaveActionViewModel>(
                 "SS_LeaveAction_SP",

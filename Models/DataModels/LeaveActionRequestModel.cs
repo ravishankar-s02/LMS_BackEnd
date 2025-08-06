@@ -4,5 +4,6 @@ namespace LMS.Models.DataModels
     {
         public long LeavePK { get; set; }
         public string Action { get; set; } // "APPROVE" or "CANCEL"
+        public string EmpCode { get; set; }
     }
 }
