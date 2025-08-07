@@ -11,6 +11,6 @@ namespace LMS.Models.ViewModels
         public DateTime fromDate { get; set; }
         public DateTime toDate { get; set; }
         public string leaveStatus { get; set; }
-        public string UpdatedUser { get; set; } 
+        public string updatedUser { get; set; } 
     }
 }
