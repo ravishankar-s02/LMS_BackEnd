@@ -98,7 +98,7 @@ namespace LMS.Services
             parameters.Add("@SS_Emp_Code", empCode);
 
             var result = await _db.QueryAsync<LeaveActionViewModel>(
-                "SS_LeaveAction_SP",
+                "SS_GetLeaveAction_SP",
                 parameters,
                 commandType: CommandType.StoredProcedure);
 
@@ -111,10 +111,10 @@ namespace LMS.Services
             var parameters = new DynamicParameters();
             parameters.Add("@LeavePK", model.LeavePK);
             parameters.Add("@Action", model.Action?.ToUpper());
-            parameters.Add("@SS_Emp_Code", model.EmpCode);  // 👈 Add this line
+            parameters.Add("@SS_Emp_Code", model.EmpCode);
 
             var result = await _db.QueryAsync<LeaveActionViewModel>(
-                "SS_LeaveAction_SP",
+                "SS_UpdateLeaveAction_SP",
                 parameters,
                 commandType: CommandType.StoredProcedure);
 
