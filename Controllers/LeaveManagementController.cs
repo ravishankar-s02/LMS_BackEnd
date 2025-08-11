@@ -101,5 +101,12 @@ namespace LMS.Controllers
             var updatedList = await _leaveManagementService.UpdateLeaveActionAsync(model);
             return Ok(updatedList);
         }
+
+        [HttpGet("my-leave-summary")]
+        public async Task<IActionResult> GetMyLeaveSummary(string empCode)
+        {
+            var history = await _leaveManagementService.GetMyLeaveSummaryAsync(empCode);
+            return Ok(history);
+        }
     }
 }

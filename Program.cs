@@ -2,6 +2,9 @@ using LMS.Services;
 using LMS.Services.Interfaces;
 using LMS.Mapper; // ✅ AutoMapper Profile namespace
 using System.Text.Json.Serialization;
+using Quartz;
+using Quartz.Impl;
+using Quartz.Spi;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +29,6 @@ builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<ILeaveManagementService, LeaveManagementService>();
 builder.Services.AddScoped<IGooseMenuService, GooseMenuService>();
 
-
 // 4. AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
@@ -40,6 +42,24 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader();
     });
 });
+
+// 6. Quartz Job Scheduling
+builder.Services.AddQuartz(q =>
+{
+    // Use Microsoft DI JobFactory
+    q.UseMicrosoftDependencyInjectionJobFactory();
+
+    // Schedule the job
+    var jobKey = new JobKey("AutoUpdateLeaveSummary");
+    q.AddJob<AutoUpdateLeaveSummaryJob>(opts => opts.WithIdentity(jobKey));
+
+    q.AddTrigger(opts => opts
+        .ForJob(jobKey)
+        .WithIdentity("AutoUpdateLeaveSummaryTrigger")
+        .WithCronSchedule("0 0 0 * * ?") // Runs every day at midnight
+    );
+});
+builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 
 var app = builder.Build();
 

@@ -120,5 +120,15 @@ namespace LMS.Services
 
             return result;
         }
+
+        public async Task<IEnumerable<MyLeaveSummaryViewModel>> GetMyLeaveSummaryAsync(string empCode)
+        {
+            var result = await _db.QueryAsync<MyLeaveSummaryViewModel>(
+                "SS_GetMyLeaveSummary_SP",
+                new { EmpCode = empCode },
+                commandType: CommandType.StoredProcedure);
+
+            return result;
+        }
     }
 }
