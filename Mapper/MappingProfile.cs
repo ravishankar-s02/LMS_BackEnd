@@ -24,6 +24,8 @@ namespace LMS.Mapper
             // Code master mapping
             CreateMap<TeamModel, TeamViewModel>();
 
+            CreateMap<TimeModel, TimeViewModel>();
+
             // Contact details mapping
             CreateMap<ContactDetailsModel, ContactDetailsViewModel>()
                 .ForMember(dest => dest.empCode, opt => opt.MapFrom(src => src.SS_Emp_Code))

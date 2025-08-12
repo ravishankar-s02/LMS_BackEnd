@@ -42,4 +42,16 @@ public class CommonService : ICommonService
 
         return _mapper.Map<List<TeamViewModel>>(result);
     }
+
+    public async Task<List<TimeViewModel>> GetCommonByTimeAsync()
+    {
+        using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+
+        var result = await connection.QueryAsync<TimeModel>(
+            "SS_GetTimeDropdown_SP",
+            commandType: CommandType.StoredProcedure
+        );
+
+        return _mapper.Map<List<TimeViewModel>>(result);
+    }
 }

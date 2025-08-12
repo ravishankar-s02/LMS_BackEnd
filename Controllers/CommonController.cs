@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using LMS.Models.ViewModels;
-using LMS.Services.Interfaces; 
+using LMS.Services.Interfaces;
 
 [ApiController]
 [Route("api/common")]
@@ -25,5 +25,12 @@ public class CommonController : ControllerBase
     {
         var data = await _service.GetCommonByTeamAsync(type);
         return Ok(data);
+    }
+    
+    [HttpGet("GetTimeDropdown")]
+    public async Task<IActionResult> GetTimeDropdown()
+    {
+        var times = await _service.GetCommonByTimeAsync();
+        return Ok(times);
     }
 }
