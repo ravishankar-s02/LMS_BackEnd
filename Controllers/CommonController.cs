@@ -26,11 +26,4 @@ public class CommonController : ControllerBase
         var data = await _service.GetCommonByTeamAsync(type);
         return Ok(data);
     }
-    
-    [HttpGet("GetTimeDropdown")]
-    public async Task<IActionResult> GetTimeDropdown()
-    {
-        var times = await _service.GetCommonByTimeAsync();
-        return Ok(times);
-    }
 }
