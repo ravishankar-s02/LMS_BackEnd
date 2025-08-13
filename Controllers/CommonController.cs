@@ -26,4 +26,11 @@ public class CommonController : ControllerBase
         var data = await _service.GetCommonByTeamAsync(type);
         return Ok(data);
     }
+
+    [HttpGet("names")]
+    public async Task<IActionResult> GetEmployeeNames()
+    {
+        var employees = await _service.GetEmployeesNameAsync();
+        return Ok(employees);
+    }
 }

@@ -42,4 +42,16 @@ public class CommonService : ICommonService
 
         return _mapper.Map<List<TeamViewModel>>(result);
     }
+
+    public async Task<IEnumerable<EmployeeNameViewModel>> GetEmployeesNameAsync()
+    {
+        using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+        {
+            var result = await db.QueryAsync<EmployeeNameViewModel>(
+                "SS_GetEmployeesName_SP",
+                commandType: CommandType.StoredProcedure
+            );
+            return result;
+        }
+    }
 }
