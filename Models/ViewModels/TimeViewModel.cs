@@ -2,6 +2,6 @@ namespace LMS.Models.ViewModels
 {
     public class TimeViewModel
     {
-        public string displayValue { get; set; }
+        public string time { get; set; }
     }
 }
