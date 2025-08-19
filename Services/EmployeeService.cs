@@ -25,6 +25,7 @@ namespace LMS.Services
                 "SS_InsertFullEmployeeDetails_SP",
                 new
                 {
+                    model.empPk,
                     model.empCode,
                     model.firstName,
                     model.lastName,
