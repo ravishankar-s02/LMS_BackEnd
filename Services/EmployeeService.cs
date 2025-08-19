@@ -76,7 +76,7 @@ namespace LMS.Services
                 "SS_UpdateFullEmployeeDetails_SP",
                 new
                 {   
-                    model.empFk,
+                    model.empPk,
                     model.empCode,
                     model.firstName,
                     model.lastName,

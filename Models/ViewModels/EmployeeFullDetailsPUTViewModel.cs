@@ -2,7 +2,7 @@ namespace LMS.Models.ViewModels
 {
     public class EmployeeFullDetailsPUTViewModel
     {
-        public string empFk { get; set; }
+        public string empPk { get; set; }
         public string empCode { get; set; }
         public string firstName { get; set; }
         public string lastName { get; set; }
