@@ -1,7 +1,8 @@
 namespace LMS.Models.ViewModels
 {
     public class EmployeeFullDetailsViewModel
-    {
+    {   
+        public string empFk { get; set; }
         public string empCode { get; set; }
         public string firstName { get; set; }
         public string lastName { get; set; }

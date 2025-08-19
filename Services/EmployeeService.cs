@@ -75,7 +75,8 @@ namespace LMS.Services
             var result = await _db.QueryFirstOrDefaultAsync<EmployeeFullDetailsViewModel>(
                 "SS_UpdateFullEmployeeDetails_SP",
                 new
-                {
+                {   
+                    model.empFk,
                     model.empCode,
                     model.firstName,
                     model.lastName,
