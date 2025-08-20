@@ -71,6 +71,9 @@ namespace LMS.Services
             parameters.Add("@LeaveType", model.leaveType);
             parameters.Add("@FromDate", model.fromDate);
             parameters.Add("@ToDate", model.toDate);
+            parameters.Add("@FromTime", model.fromTime);
+            parameters.Add("@ToTime", model.toTime);
+            parameters.Add("@TotalHours", model.totalHours);
             parameters.Add("@Reason", model.reason);
             parameters.Add("@Duration", model.duration);
 
