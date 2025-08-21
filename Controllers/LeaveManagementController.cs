@@ -22,8 +22,8 @@ namespace LMS.Controllers
         public async Task<IActionResult> ApplyLeave([FromBody] LeaveApplicationViewModel model)
         {
             // Convert fromTime and toTime from string to TimeSpan?
-            TimeSpan? parsedFromTime = TimeSpan.TryParse(model.fromTime, out var ft) ? ft : (TimeSpan?)null;
-            TimeSpan? parsedToTime = TimeSpan.TryParse(model.toTime, out var tt) ? tt : (TimeSpan?)null;
+            // TimeSpan? parsedFromTime = TimeSpan.TryParse(model.fromTime, out var ft) ? ft : (TimeSpan?)null;
+            // TimeSpan? parsedToTime = TimeSpan.TryParse(model.toTime, out var tt) ? tt : (TimeSpan?)null;
 
             // Convert totalHours from string to decimal?
             decimal? parsedTotalHours = decimal.TryParse(model.totalHours, out var th) ? th : (decimal?)null;
@@ -35,8 +35,8 @@ namespace LMS.Controllers
                 LeaveType = model.leaveType,
                 FromDate = model.fromDate,
                 ToDate = model.toDate,
-                FromTime = parsedFromTime,
-                ToTime = parsedToTime,
+                FromTime = model.fromTime,
+                ToTime = model.toTime,
                 TotalHours = parsedTotalHours,
                 Duration = model.duration,
                 Reason = model.reason
