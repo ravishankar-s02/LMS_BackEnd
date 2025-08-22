@@ -24,7 +24,6 @@ namespace LMS.Services
         public async Task<JobDetailsViewModel?> GetJobDetailsByEmpIdAsync(string empCode)
         {
             using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-
             var parameters = new DynamicParameters();
             parameters.Add("@SS_Emp_Code", empCode);
 
@@ -33,14 +32,12 @@ namespace LMS.Services
                 parameters,
                 commandType: CommandType.StoredProcedure
             );
-
             return result == null ? null : _mapper.Map<JobDetailsViewModel>(result);
         }
 
         public async Task<SalaryDetailsViewModel?> GetSalaryDetailsByEmpIdAsync(string empCode)
         {
             using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-
             var parameters = new DynamicParameters();
             parameters.Add("@SS_Emp_Code", empCode);
 
@@ -49,7 +46,6 @@ namespace LMS.Services
                 parameters,
                 commandType: CommandType.StoredProcedure
             );
-
             return result == null ? null : _mapper.Map<SalaryDetailsViewModel>(result);
         }
     }

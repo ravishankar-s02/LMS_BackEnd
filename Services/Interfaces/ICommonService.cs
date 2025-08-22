@@ -1,8 +1,11 @@
 using LMS.Models.ViewModels;
 
-public interface ICommonService
+namespace LMS.Services.Interfaces
 {
-    Task<List<CommonViewModel>> GetCommonByTypeAsync(string codeType);
-    Task<List<TeamViewModel>> GetCommonByTeamAsync(string codeType);
-    Task<IEnumerable<EmployeeNameViewModel>> GetEmployeesNameAsync();
+    public interface ICommonService
+    {
+        Task<List<CommonViewModel>> GetCommonByTypeAsync(string codeType); // Common Dropdowns
+        Task<List<TeamViewModel>> GetCommonByTeamAsync(string codeType); // Team Dropdowns
+        Task<IEnumerable<EmployeeNameViewModel>> GetEmployeesNameAsync(); // Employee Name Dropdown
+    }
 }

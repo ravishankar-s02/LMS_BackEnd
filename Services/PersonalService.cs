@@ -33,7 +33,6 @@ namespace LMS.Services
                 parameters,
                 commandType: CommandType.StoredProcedure
             );
-
             return result == null ? null : _mapper.Map<EmployeeDetailsViewModel>(result);
         }
 
@@ -49,7 +48,6 @@ namespace LMS.Services
                 parameters,
                 commandType: CommandType.StoredProcedure
             );
-
             return result == null ? null : _mapper.Map<ContactDetailsViewModel>(result);
         }
 
@@ -65,7 +63,6 @@ namespace LMS.Services
                 parameters,
                 commandType: CommandType.StoredProcedure
             );
-
             return result == null ? null : _mapper.Map<TeamDetailsViewModel>(result);
         }
     }

@@ -12,13 +12,11 @@ namespace LMS.Services
     {
         private readonly IDbConnection _db;
         private readonly IConfiguration _configuration;
-
         public EmployeeService(IConfiguration config)
         {
             _configuration = config;
             _db = new SqlConnection(config.GetConnectionString("DefaultConnection"));
         }
-
         public async Task<bool> InsertFullEmployeeDetails(EmployeeFullDetailsViewModel model)
         {
             var result = await _db.QueryFirstOrDefaultAsync<(int Status, string Message)>(
@@ -58,16 +56,13 @@ namespace LMS.Services
 
             if (result.Status == 1)
                 return true;
-
             throw new Exception(result.Message);
         }
-
         public async Task<IEnumerable<EmployeeFullProfileViewModel>> GetEmployeeFullProfileAsync()
         {
             var result = await _db.QueryAsync<EmployeeFullProfileViewModel>(
                 "SS_GetEmployeeFullProfile_SP",
                 commandType: CommandType.StoredProcedure);
-
             return result;
         }
 
@@ -111,7 +106,6 @@ namespace LMS.Services
 
             if (result == null)
                 throw new Exception("No employee record returned from update");
-
             return result;
         }
     }

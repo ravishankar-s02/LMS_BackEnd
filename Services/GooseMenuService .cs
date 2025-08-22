@@ -12,12 +12,10 @@ namespace LMS.Services
     public class GooseMenuService : IGooseMenuService
     {
         private readonly IConfiguration _configuration;
-
         public GooseMenuService(IConfiguration configuration)
         {
             _configuration = configuration;
         }
-
         public async Task<GooseMenuGroupedJsonModel> GetHierarchicalMenuAsync(string empCode)
         {
             var connectionString = _configuration.GetConnectionString("DefaultConnection");
@@ -25,7 +23,6 @@ namespace LMS.Services
             using var connection = new SqlConnection(connectionString);
             var parameters = new DynamicParameters();
             parameters.Add("@SS_Emp_Code", empCode);
-
             await connection.OpenAsync();
 
             var result = await connection.QueryFirstOrDefaultAsync<string>(
@@ -42,7 +39,6 @@ namespace LMS.Services
                     BOTTOMMENU = new()
                 };
             }
-
             return JsonConvert.DeserializeObject<GooseMenuGroupedJsonModel>(result);
         }
     }

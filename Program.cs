@@ -1,6 +1,6 @@
 using LMS.Services;
 using LMS.Services.Interfaces;
-using LMS.Mapper; // ✅ AutoMapper Profile namespace
+using LMS.Mapper;
 using System.Text.Json.Serialization;
 using Quartz;
 using Quartz.Impl;
@@ -63,14 +63,14 @@ builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 
 var app = builder.Build();
 
-// Swagger UI only in Development
+// 7. Swagger UI only in Development
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-// Middleware
+// 8. Middleware
 app.UseCors("AllowAll");
 app.UseAuthorization();
 app.MapControllers();

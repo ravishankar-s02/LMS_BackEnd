@@ -16,25 +16,23 @@ namespace LMS.Controllers
             _employmentService = employmentService;
         }
 
+        // 1. To Get Job Details
         [HttpGet("job/{empId}")]
         public async Task<ActionResult<JobDetailsViewModel>> GetJobDetails(string empId)
         {
             var result = await _employmentService.GetJobDetailsByEmpIdAsync(empId);
-
             if (result == null)
                 return NotFound(new { message = "Employee not found" });
-
             return Ok(result);
         }
 
+        // 2. To Get Salary Details
         [HttpGet("salary/{empId}")]
         public async Task<ActionResult<SalaryDetailsViewModel>> GetSalaryDetails(string empId)
         {
             var result = await _employmentService.GetSalaryDetailsByEmpIdAsync(empId);
-
             if (result == null)
                 return NotFound(new { message = "Employee not found" });
-
             return Ok(result);
         }
     }

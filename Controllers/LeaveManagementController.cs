@@ -4,7 +4,6 @@ using LMS.Models.ViewModels;
 using LMS.Services.Interfaces;
 using LMS.Models.DataModels;
 
-
 namespace LMS.Controllers
 {
     [ApiController]
@@ -18,14 +17,11 @@ namespace LMS.Controllers
             _leaveManagementService = leaveManagementService;
         }
 
+        // 1. To Apply Leave
         [HttpPost("apply")]
         public async Task<IActionResult> ApplyLeave([FromBody] LeaveApplicationViewModel model)
-        {
-            // Convert fromTime and toTime from string to TimeSpan?
-            // TimeSpan? parsedFromTime = TimeSpan.TryParse(model.fromTime, out var ft) ? ft : (TimeSpan?)null;
-            // TimeSpan? parsedToTime = TimeSpan.TryParse(model.toTime, out var tt) ? tt : (TimeSpan?)null;
-
-            // Convert totalHours from string to decimal?
+        { 
+            // To Convert totalHours from string to decimal?
             decimal? parsedTotalHours = decimal.TryParse(model.totalHours, out var th) ? th : (decimal?)null;
 
             // Prepare data model to pass to service
@@ -43,21 +39,20 @@ namespace LMS.Controllers
             };
 
             var (status, message) = await _leaveManagementService.ApplyLeaveAsync(dataModel);
-
             if (status == 1)
                 return Ok(new { message });
-
             return BadRequest(new { message });
         }
 
-
-        [HttpGet("my-history")]
+        // 2. To Get My Leave History
+        [HttpGet("my-history/{empCode}")]
         public async Task<IActionResult> GetMyLeaveHistory(string empCode)
         {
             var history = await _leaveManagementService.GetMyLeaveHistoryAsync(empCode);
             return Ok(history);
         }
 
+        // 3. To Get Users Leave History
         [HttpGet("users-history/{empCode}")]
         public async Task<IActionResult> GetUsersLeaveHistory(string empCode)
         {
@@ -65,6 +60,7 @@ namespace LMS.Controllers
             return Ok(history);
         }
 
+        // 4. To Perform Update Leave Operation
         [HttpPut("update-leave")]
         public async Task<IActionResult> UpdateLeave([FromBody] LeaveUpdateModel model)
         {
@@ -75,6 +71,7 @@ namespace LMS.Controllers
                 return BadRequest(new { result.Status, result.Message });
         }
 
+        // 4. To Perform Delete Operation
         [HttpPut("delete-leave")]
         public async Task<IActionResult> DeleteLeave([FromBody] LeaveDeleteModel model)
         {
@@ -85,7 +82,8 @@ namespace LMS.Controllers
                 return BadRequest(new { result.Status, result.Message });
         }
 
-        [HttpGet("leave-action/{empCode}")]
+        // 5. To Get Leave Requests
+        [HttpGet("leave-request/{empCode}")]
         public async Task<IActionResult> GetLeaveAction([FromRoute] string empCode)
         {
             if (string.IsNullOrWhiteSpace(empCode))
@@ -95,6 +93,7 @@ namespace LMS.Controllers
             return Ok(history);
         }
 
+        // 6. To Approve or Cancel the Leave
         [HttpPost("leave-action/update")]
         public async Task<IActionResult> UpdateLeaveAction([FromBody] LeaveActionRequestModel model)
         {
@@ -102,7 +101,8 @@ namespace LMS.Controllers
             return Ok(updatedList);
         }
 
-        [HttpGet("my-leave-summary")]
+        // 7. To Get Leave Summary
+        [HttpGet("my-leave-summary/{empCode}")]
         public async Task<IActionResult> GetMyLeaveSummary(string empCode)
         {
             var history = await _leaveManagementService.GetMyLeaveSummaryAsync(empCode);

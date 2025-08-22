@@ -2,35 +2,41 @@ using Microsoft.AspNetCore.Mvc;
 using LMS.Models.ViewModels;
 using LMS.Services.Interfaces;
 
-[ApiController]
-[Route("api/common")]
-public class CommonController : ControllerBase
+namespace LMS.Controllers
 {
-    private readonly ICommonService _service;
-
-    public CommonController(ICommonService service)
+    [ApiController]
+    [Route("api/common")]
+    public class CommonController : ControllerBase
     {
-        _service = service;
-    }
+        private readonly ICommonService _service;
 
-    [HttpGet("code-type/{type}")]
-    public async Task<ActionResult<List<CommonViewModel>>> GetByType(string type)
-    {
-        var data = await _service.GetCommonByTypeAsync(type);
-        return Ok(data);
-    }
+        public CommonController(ICommonService service)
+        {
+            _service = service;
+        }
 
-    [HttpGet("team-type/{type}")]
-    public async Task<ActionResult<List<TeamViewModel>>> GetByTeam(string type)
-    {
-        var data = await _service.GetCommonByTeamAsync(type);
-        return Ok(data);
-    }
+        // 1. This is for Common Dropdowns
+        [HttpGet("code-type/{type}")]
+        public async Task<ActionResult<List<CommonViewModel>>> GetByType(string type)
+        {
+            var data = await _service.GetCommonByTypeAsync(type);
+            return Ok(data);
+        }
 
-    [HttpGet("names")]
-    public async Task<IActionResult> GetEmployeeNames()
-    {
-        var employees = await _service.GetEmployeesNameAsync();
-        return Ok(employees);
+        // 2. This is for Team Dropdowns
+        [HttpGet("team-type/{type}")]
+        public async Task<ActionResult<List<TeamViewModel>>> GetByTeam(string type)
+        {
+            var data = await _service.GetCommonByTeamAsync(type);
+            return Ok(data);
+        }
+
+        // 3. This is for Employee Name Dropdown
+        [HttpGet("names")]
+        public async Task<IActionResult> GetEmployeeNames()
+        {
+            var employees = await _service.GetEmployeesNameAsync();
+            return Ok(employees);
+        }
     }
 }

@@ -15,6 +15,7 @@ namespace LMS.Controllers
             _loginService = loginService;
         }
 
+        // 1. To Login
         [HttpPost("")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {

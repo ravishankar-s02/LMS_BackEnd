@@ -16,36 +16,33 @@ namespace LMS.Controllers
             _personalService = personalService;
         }
 
+        //1. To Get Employee Personal Details
         [HttpGet("employee/{empId}")]
         public async Task<ActionResult<EmployeeDetailsViewModel>> GetEmployeeDetails(string empId)
         {
             var result = await _personalService.GetEmployeeDetailsByEmpIdAsync(empId);
-
             if (result == null)
                 return NotFound(new { message = "Employee not found" });
-
             return Ok(result);
         }
 
+        //2. To Get Employee Contact Details
         [HttpGet("contact/{empId}")]
         public async Task<ActionResult<ContactDetailsViewModel>> GetContactDetails(string empId)
         {
             var result = await _personalService.GetContactDetailsByEmpIdAsync(empId);
-
             if (result == null)
                 return NotFound(new { message = "Employee not found" });
-
             return Ok(result);
         }
 
+        //3. To Get Employee Team Details
         [HttpGet("team/{empId}")]
         public async Task<ActionResult<TeamDetailsViewModel>> GetTeamDetails(string empId)
         {
             var result = await _personalService.GetTeamDetailsByEmpIdAsync(empId);
-
             if (result == null)
                 return NotFound(new { message = "Employee not found" });
-
             return Ok(result);
         }
     }

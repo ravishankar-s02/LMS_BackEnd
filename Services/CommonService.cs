@@ -20,26 +20,22 @@ public class CommonService : ICommonService
     public async Task<List<CommonViewModel>> GetCommonByTypeAsync(string codeType)
     {
         using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-
         var result = await connection.QueryAsync<CommonModel>(
             "SS_GetCommonByType_SP",
             new { CodeType = codeType },
             commandType: CommandType.StoredProcedure
         );
-
         return _mapper.Map<List<CommonViewModel>>(result);
     }
 
     public async Task<List<TeamViewModel>> GetCommonByTeamAsync(string codeType)
     {
         using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-
         var result = await connection.QueryAsync<TeamModel>(
             "SS_GetTeam_SP",
             new { CodeType = codeType },
             commandType: CommandType.StoredProcedure
         );
-
         return _mapper.Map<List<TeamViewModel>>(result);
     }
 

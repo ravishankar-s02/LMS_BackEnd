@@ -16,6 +16,7 @@ namespace LMS.Controllers
             _employeeService = employeeService;
         }
 
+        // 1. To Add New Employee
         [HttpPost("add-employee-details")]
         public async Task<IActionResult> AddFullDetails([FromBody] EmployeeFullDetailsViewModel model)
         {
@@ -30,6 +31,7 @@ namespace LMS.Controllers
             }
         }
 
+        // 2. To Get Employee Details
         [HttpGet("view-employee-details")]
         public async Task<IActionResult> GetEmployeeProfile()
         {
@@ -37,13 +39,14 @@ namespace LMS.Controllers
             return Ok(history);
         }
 
+        // 3. To Update Employee Details
         [HttpPut("update-employee-details")]
         public async Task<IActionResult> UpdateEmployeeProfile([FromBody] EmployeeFullDetailsPUTViewModel model)
         {
             try
             {
                 var updatedEmployee = await _employeeService.UpdateFullEmployeeDetailsPUTAsync(model);
-                return Ok(updatedEmployee);  // return the full updated details
+                return Ok(updatedEmployee);
             }
             catch (Exception ex)
             {

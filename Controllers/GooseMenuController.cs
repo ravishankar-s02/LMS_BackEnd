@@ -16,14 +16,13 @@ namespace LMS.Controllers
             _menuService = menuService;
         }
 
+        // 1. To Perform Hierarchy Operation
         [HttpGet("hierarchical-menu/{empCode}")]
         public async Task<ActionResult<GooseMenuGroupedJsonModel>> GetHierarchicalMenu(string empCode)
         {
             var result = await _menuService.GetHierarchicalMenuAsync(empCode);
-
             if (result == null)
                 return NotFound("No menu found for the employee.");
-
             return Ok(result);
         }
     }

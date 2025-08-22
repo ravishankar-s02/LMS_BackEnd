@@ -36,7 +36,6 @@ namespace LMS.Services
                     Reason = model.Reason
                 },
                 commandType: CommandType.StoredProcedure);
-
             return result;
         }
         public async Task<IEnumerable<MyLeaveHistoryViewModel>> GetMyLeaveHistoryAsync(string empCode)
@@ -45,7 +44,6 @@ namespace LMS.Services
                 "SS_GetMyLeaveHistory_SP",
                 new { EmpCode = empCode },
                 commandType: CommandType.StoredProcedure);
-
             return result;
         }
 
@@ -53,13 +51,11 @@ namespace LMS.Services
         {
             var parameters = new DynamicParameters();
             parameters.Add("@SS_Emp_Code", empCode);
-
             var result = await _db.QueryAsync<UsersLeaveHistoryViewModel>(
                 "SS_GetUsersLeaveHistory_SP",
                 parameters,
                 commandType: CommandType.StoredProcedure
             );
-
             return result;
         }
 
@@ -91,7 +87,6 @@ namespace LMS.Services
 
             var result = await _db.QueryFirstOrDefaultAsync<(int, string)>(
                 "SS_DeleteLeaveApplication_SP", parameters, commandType: CommandType.StoredProcedure);
-
             return result;
         }
 
@@ -104,7 +99,6 @@ namespace LMS.Services
                 "SS_GetLeaveAction_SP",
                 parameters,
                 commandType: CommandType.StoredProcedure);
-
             return result;
         }
 
@@ -120,7 +114,6 @@ namespace LMS.Services
                 "SS_UpdateLeaveAction_SP",
                 parameters,
                 commandType: CommandType.StoredProcedure);
-
             return result;
         }
 
@@ -130,7 +123,6 @@ namespace LMS.Services
                 "SS_GetMyLeaveSummary_SP",
                 new { EmpCode = empCode },
                 commandType: CommandType.StoredProcedure);
-
             return result;
         }
     }

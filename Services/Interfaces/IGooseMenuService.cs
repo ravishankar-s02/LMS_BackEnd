@@ -5,6 +5,6 @@ namespace LMS.Services.Interfaces
 {
     public interface IGooseMenuService
     {
-        Task<GooseMenuGroupedJsonModel> GetHierarchicalMenuAsync(string empCode);
+        Task<GooseMenuGroupedJsonModel> GetHierarchicalMenuAsync(string empCode); // Team Filterations [hierarchy]
     }
 }
