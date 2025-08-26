@@ -76,9 +76,9 @@ namespace LMS.Services
         }
 
 
-        public async Task<EmployeeFullDetailsViewModel> UpdateFullEmployeeDetailsPUTAsync(EmployeeFullDetailsPUTViewModel model)
+        public async Task<EmployeeFullProfileViewModel> UpdateFullEmployeeDetailsPUTAsync(EmployeeFullProfileViewModel model)
         {
-            var result = await _db.QueryFirstOrDefaultAsync<EmployeeFullDetailsViewModel>(
+            var result = await _db.QueryFirstOrDefaultAsync<EmployeeFullProfileModel>(
                 "LMS_UpdateFullEmployeeDetails",
                 new
                 {   
@@ -116,7 +116,7 @@ namespace LMS.Services
 
             if (result == null)
                 throw new Exception("No employee record returned from update");
-            return result;
+            return _mapper.Map<EmployeeFullProfileViewModel>(result);
         }
     }
 }

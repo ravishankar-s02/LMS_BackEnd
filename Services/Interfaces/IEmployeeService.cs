@@ -8,6 +8,6 @@ namespace LMS.Services.Interfaces
     {
         Task<bool> InsertFullEmployeeDetails(EmployeeFullDetailsViewModel model); // Add New Employee
         Task<IEnumerable<EmployeeFullProfileViewModel>> GetEmployeeFullProfileAsync(); // Get Employee Details
-        Task<EmployeeFullDetailsViewModel> UpdateFullEmployeeDetailsPUTAsync(EmployeeFullDetailsPUTViewModel model); // Employee Updations
+        Task<EmployeeFullProfileViewModel> UpdateFullEmployeeDetailsPUTAsync(EmployeeFullProfileViewModel model); // Employee Updations
     }
 }

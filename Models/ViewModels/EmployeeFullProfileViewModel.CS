@@ -14,7 +14,7 @@ namespace LMS.Models.ViewModels
         public string nationality { get; set; }
 
         public string phoneNumber { get; set; }
-        public string alternateNumber { get; set; }
+        public string? alternateNumber { get; set; }
         public string email { get; set; }
         public string streetAddress { get; set; }
         public string city { get; set; }

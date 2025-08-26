@@ -41,7 +41,7 @@ namespace LMS.Controllers
 
         // 3. To Update Employee Details
         [HttpPut("update-employee-details")]
-        public async Task<IActionResult> UpdateEmployeeProfile([FromBody] EmployeeFullDetailsPUTViewModel model)
+        public async Task<IActionResult> UpdateEmployeeProfile([FromBody] EmployeeFullProfileViewModel model)
         {
             try
             {
