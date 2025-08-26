@@ -2,6 +2,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 using Dapper;
+using AutoMapper;
 using LMS.Models.ViewModels;
 using LMS.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
@@ -12,9 +13,12 @@ namespace LMS.Services
     {
         private readonly IDbConnection _db;
         private readonly IConfiguration _configuration;
-        public EmployeeService(IConfiguration config)
+        private readonly IMapper _mapper;
+
+        public EmployeeService(IConfiguration config, IMapper mapper)
         {
             _configuration = config;
+            _mapper = mapper;
             _db = new SqlConnection(config.GetConnectionString("DefaultConnection"));
         }
         public async Task<bool> InsertFullEmployeeDetails(EmployeeFullDetailsViewModel model)
@@ -58,13 +62,19 @@ namespace LMS.Services
                 return true;
             throw new Exception(result.Message);
         }
+
         public async Task<IEnumerable<EmployeeFullProfileViewModel>> GetEmployeeFullProfileAsync()
         {
-            var result = await _db.QueryAsync<EmployeeFullProfileViewModel>(
+            using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+
+            var result = await connection.QueryAsync<EmployeeFullProfileModel>(
                 "LMS_GetEmployeeFullDetails",
-                commandType: CommandType.StoredProcedure);
-            return result;
+                commandType: CommandType.StoredProcedure
+            );
+
+            return _mapper.Map<IEnumerable<EmployeeFullProfileViewModel>>(result);
         }
+
 
         public async Task<EmployeeFullDetailsViewModel> UpdateFullEmployeeDetailsPUTAsync(EmployeeFullDetailsPUTViewModel model)
         {
