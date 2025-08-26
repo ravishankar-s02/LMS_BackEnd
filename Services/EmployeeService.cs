@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Dapper;
 using AutoMapper;
 using LMS.Models.ViewModels;
+using LMS.Models.DataModels;
 using LMS.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
 
@@ -58,9 +59,9 @@ namespace LMS.Services
                 },
                 commandType: CommandType.StoredProcedure);
 
-            if (result.Status == 1)
-                return true;
-            throw new Exception(result.Message);
+            if (result == null)
+                throw new Exception("No employee record returned from save");
+            return _mapper.Map<EmployeeFullProfileViewModel>(result);
         }
 
         public async Task<IEnumerable<EmployeeFullProfileViewModel>> GetEmployeeFullProfileAsync()
