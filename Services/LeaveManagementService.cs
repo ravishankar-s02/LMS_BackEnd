@@ -40,11 +40,11 @@ namespace LMS.Services
         }
         public async Task<IEnumerable<MyLeaveHistoryViewModel>> GetMyLeaveHistoryAsync(string empCode)
         {
-            var result = await _db.QueryAsync<MyLeaveHistoryViewModel>(
+            var result = await _db.QueryAsync<MyLeaveHistoryModel>(
                 "LMS_GetMyLeaveHistory",
                 new { EmpCode = empCode },
                 commandType: CommandType.StoredProcedure);
-            return result;
+            return _mapper.Map<IEnumerable<MyLeaveHistoryViewModel>>(result);;
         }
 
         public async Task<IEnumerable<UsersLeaveHistoryViewModel>> GetUsersLeaveHistoryAsync(string empCode)

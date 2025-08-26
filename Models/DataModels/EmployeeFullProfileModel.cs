@@ -1,8 +1,8 @@
-namespace LMS.Models.ViewModels
+namespace LMS.Models.DataModels
 {
     public class EmployeeFullProfileModel
     {   
-        public int SS_Emp_PK { get; set; }
+        public int? SS_Emp_PK { get; set; }
         public string SS_Emp_Code { get; set; }
         public string Emp_Status { get; set; }
         public string First_Name { get; set; }

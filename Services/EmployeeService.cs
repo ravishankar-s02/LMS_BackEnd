@@ -21,7 +21,7 @@ namespace LMS.Services
             _mapper = mapper;
             _db = new SqlConnection(config.GetConnectionString("DefaultConnection"));
         }
-        public async Task<bool> InsertFullEmployeeDetails(EmployeeFullDetailsViewModel model)
+        public async Task<bool> InsertFullEmployeeDetails(EmployeeFullProfileViewModel model)
         {
             var result = await _db.QueryFirstOrDefaultAsync<(int Status, string Message)>(
                 "LMS_InsertFullEmployeeDetails",

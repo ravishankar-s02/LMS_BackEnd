@@ -18,7 +18,7 @@ namespace LMS.Controllers
 
         // 1. To Add New Employee
         [HttpPost("add-employee-details")]
-        public async Task<IActionResult> AddFullDetails([FromBody] EmployeeFullDetailsViewModel model)
+        public async Task<IActionResult> AddFullDetails([FromBody] EmployeeFullProfileViewModel model)
         {
             try
             {

@@ -2,7 +2,7 @@ namespace LMS.Models.ViewModels
 {
     public class EmployeeFullProfileViewModel
     {   
-        public int empPk { get; set; }
+        public int? empPk { get; set; }
         public string empCode { get; set; }
         public string empStatus { get; set; }
         public string firstName { get; set; }
