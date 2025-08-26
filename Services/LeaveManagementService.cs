@@ -22,7 +22,7 @@ namespace LMS.Services
         public async Task<(int Status, string Message)> ApplyLeaveAsync(LeaveApplicationModel model)
         {
             var result = await _db.QueryFirstOrDefaultAsync<(int, string)>(
-                "SS_ApplyLeave_SP",
+                "LMS_ApplyLeave",
                 new
                 {
                     EmpCode = model.EmpCode,
@@ -41,7 +41,7 @@ namespace LMS.Services
         public async Task<IEnumerable<MyLeaveHistoryViewModel>> GetMyLeaveHistoryAsync(string empCode)
         {
             var result = await _db.QueryAsync<MyLeaveHistoryViewModel>(
-                "SS_GetMyLeaveHistory_SP",
+                "LMS_GetMyLeaveHistory",
                 new { EmpCode = empCode },
                 commandType: CommandType.StoredProcedure);
             return result;
@@ -52,7 +52,7 @@ namespace LMS.Services
             var parameters = new DynamicParameters();
             parameters.Add("@SS_Emp_Code", empCode);
             var result = await _db.QueryAsync<UsersLeaveHistoryViewModel>(
-                "SS_GetUsersLeaveHistory_SP",
+                "LMS_GetUsersLeaveHistory",
                 parameters,
                 commandType: CommandType.StoredProcedure
             );
@@ -74,7 +74,7 @@ namespace LMS.Services
             parameters.Add("@Duration", model.duration);
 
             var result = await _db.QueryFirstOrDefaultAsync<(int Status, string Message)>(
-                "SS_UpdateLeaveApplication_SP", parameters, commandType: CommandType.StoredProcedure);
+                "LMS_UpdateLeaveApplication", parameters, commandType: CommandType.StoredProcedure);
 
             return result;
         }
@@ -86,7 +86,7 @@ namespace LMS.Services
             parameters.Add("@EmpCode", model.empCode);
 
             var result = await _db.QueryFirstOrDefaultAsync<(int, string)>(
-                "SS_DeleteLeaveApplication_SP", parameters, commandType: CommandType.StoredProcedure);
+                "LMS_DeleteLeaveApplication", parameters, commandType: CommandType.StoredProcedure);
             return result;
         }
 
@@ -96,7 +96,7 @@ namespace LMS.Services
             parameters.Add("@SS_Emp_Code", empCode);
 
             var result = await _db.QueryAsync<LeaveActionViewModel>(
-                "SS_GetLeaveAction_SP",
+                "LMS_GetLeaveRequest",
                 parameters,
                 commandType: CommandType.StoredProcedure);
             return result;
@@ -111,7 +111,7 @@ namespace LMS.Services
             parameters.Add("@SS_Emp_Code", model.EmpCode);
 
             var result = await _db.QueryAsync<LeaveActionViewModel>(
-                "SS_UpdateLeaveAction_SP",
+                "LMS_UpdateLeaveRequest",
                 parameters,
                 commandType: CommandType.StoredProcedure);
             return result;
@@ -120,7 +120,7 @@ namespace LMS.Services
         public async Task<IEnumerable<MyLeaveSummaryViewModel>> GetMyLeaveSummaryAsync(string empCode)
         {
             var result = await _db.QueryAsync<MyLeaveSummaryViewModel>(
-                "SS_GetMyLeaveSummary_SP",
+                "LMS_GetLeaveSummary",
                 new { EmpCode = empCode },
                 commandType: CommandType.StoredProcedure);
             return result;

@@ -20,7 +20,7 @@ namespace LMS.Services
         public async Task<bool> InsertFullEmployeeDetails(EmployeeFullDetailsViewModel model)
         {
             var result = await _db.QueryFirstOrDefaultAsync<(int Status, string Message)>(
-                "SS_InsertFullEmployeeDetails_SP",
+                "LMS_InsertFullEmployeeDetails",
                 new
                 {
                     model.empPk,
@@ -61,7 +61,7 @@ namespace LMS.Services
         public async Task<IEnumerable<EmployeeFullProfileViewModel>> GetEmployeeFullProfileAsync()
         {
             var result = await _db.QueryAsync<EmployeeFullProfileViewModel>(
-                "SS_GetEmployeeFullProfile_SP",
+                "LMS_GetEmployeeFullDetails",
                 commandType: CommandType.StoredProcedure);
             return result;
         }
@@ -69,7 +69,7 @@ namespace LMS.Services
         public async Task<EmployeeFullDetailsViewModel> UpdateFullEmployeeDetailsPUTAsync(EmployeeFullDetailsPUTViewModel model)
         {
             var result = await _db.QueryFirstOrDefaultAsync<EmployeeFullDetailsViewModel>(
-                "SS_UpdateFullEmployeeDetails_SP",
+                "LMS_UpdateFullEmployeeDetails",
                 new
                 {   
                     model.empPk,

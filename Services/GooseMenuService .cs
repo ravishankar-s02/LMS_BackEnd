@@ -26,7 +26,7 @@ namespace LMS.Services
             await connection.OpenAsync();
 
             var result = await connection.QueryFirstOrDefaultAsync<string>(
-                "SS_GetGooseMenu_Hierarchical_JSON_SP",
+                "LMS_GetGooseMenu_Hierarchical",
                 parameters,
                 commandType: CommandType.StoredProcedure
             );

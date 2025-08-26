@@ -21,7 +21,7 @@ public class CommonService : ICommonService
     {
         using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
         var result = await connection.QueryAsync<CommonModel>(
-            "SS_GetCommonByType_SP",
+            "LMS_GetCommonByType",
             new { CodeType = codeType },
             commandType: CommandType.StoredProcedure
         );
@@ -32,7 +32,7 @@ public class CommonService : ICommonService
     {
         using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
         var result = await connection.QueryAsync<TeamModel>(
-            "SS_GetTeam_SP",
+            "LMS_GetTeam",
             new { CodeType = codeType },
             commandType: CommandType.StoredProcedure
         );
@@ -44,7 +44,7 @@ public class CommonService : ICommonService
         using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
         {
             var result = await db.QueryAsync<EmployeeNameViewModel>(
-                "SS_GetEmployeesName_SP",
+                "LMS_GetEmployeesName",
                 commandType: CommandType.StoredProcedure
             );
             return result;

@@ -16,7 +16,7 @@ public class AutoUpdateLeaveSummaryJob : IJob
     {
         using (var connection = new SqlConnection(_connectionString))
         {
-            await connection.ExecuteAsync("SS_AutoUpdateLeaveSummary_SP", commandType: System.Data.CommandType.StoredProcedure);
+            await connection.ExecuteAsync("LMS_AutoUpdateLeaveSummary", commandType: System.Data.CommandType.StoredProcedure);
         }
     }
 }

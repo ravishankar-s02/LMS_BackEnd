@@ -27,7 +27,7 @@ namespace LMS.Services
             parameters.Add("@ErrorMessage", dbType: DbType.String, size: 5000, direction: ParameterDirection.Output);
             parameters.Add("@OutJSON", dbType: DbType.String, size: int.MaxValue, direction: ParameterDirection.Output);
 
-            await connection.ExecuteAsync("SS_EmployeeLogin_SP", parameters, commandType: CommandType.StoredProcedure);
+            await connection.ExecuteAsync("LMS_EmployeeLogin", parameters, commandType: CommandType.StoredProcedure);
 
             var status = parameters.Get<byte>("@Status");
             var errorMessage = parameters.Get<string>("@ErrorMessage");
