@@ -13,10 +13,12 @@ namespace LMS.Services
     public class LeaveManagementService : ILeaveManagementService
     {
         private readonly IDbConnection _db;
+        private readonly IMapper _mapper;
 
-        public LeaveManagementService(IConfiguration configuration)
+        public LeaveManagementService(IConfiguration configuration, IMapper mapper)
         {
             _db = new SqlConnection(configuration.GetConnectionString("DefaultConnection"));
+            _mapper = mapper;
         }
 
         public async Task<(int Status, string Message)> ApplyLeaveAsync(LeaveApplicationModel model)
