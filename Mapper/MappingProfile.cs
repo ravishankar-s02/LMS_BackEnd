@@ -90,6 +90,19 @@ namespace LMS.Mapper
                 .ForMember(dest => dest.currency, opt => opt.MapFrom(src => src.Currency))
                 .ForMember(dest => dest.basicSalary, opt => opt.MapFrom(src => src.Basic_Salary))
                 .ForMember(dest => dest.payFrequency, opt => opt.MapFrom(src => src.Pay_Frequency));
+
+            //7. Get Employee Full Details
+            CreateMap<MyLeaveHistoryModel, MyLeaveHistoryViewModel>()
+                .ForMember(dest => dest.leaveId, opt => opt.MapFrom(src => src.SS_Leave_PK))
+                .ForMember(dest => dest.empCode, opt => opt.MapFrom(src => src.SS_Emp_Code))
+                .ForMember(dest => dest.leaveType, opt => opt.MapFrom(src => src.Leave_Type))
+                .ForMember(dest => dest.fromDate, opt => opt.MapFrom(src => src.From_Date))
+                .ForMember(dest => dest.toDate, opt => opt.MapFrom(src => src.To_Date))
+                .ForMember(dest => dest.fromTime, opt => opt.MapFrom(src => src.From_Time))
+                .ForMember(dest => dest.toTime, opt => opt.MapFrom(src => src.To_Time))
+                .ForMember(dest => dest.duration, opt => opt.MapFrom(src => src.Duration))
+                .ForMember(dest => dest.leaveStatus, opt => opt.MapFrom(src => src.Leave_Status))
+                .ForMember(dest => dest.reason, opt => opt.MapFrom(src => src.Reason));
         }
     }
 }
