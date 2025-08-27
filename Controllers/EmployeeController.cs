@@ -23,7 +23,8 @@ namespace LMS.Controllers
             try
             {
                 var success = await _employeeService.InsertFullEmployeeDetails(model);
-                return Ok(new { message = "Employee details inserted successfully." });
+                 return Ok(success);
+                // return Ok(new { message = "Employee details inserted successfully." });
             }
             catch (Exception ex)
             {
