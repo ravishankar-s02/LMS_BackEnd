@@ -22,13 +22,13 @@ namespace LMS.Services
             _mapper = mapper;
             _db = new SqlConnection(config.GetConnectionString("DefaultConnection"));
         }
-        public async Task<bool> InsertFullEmployeeDetails(EmployeeFullProfileViewModel model)
+        
+        public async Task<EmployeeFullProfileViewModel> InsertFullEmployeeDetails(EmployeeFullProfileViewModel model)
         {
-            var result = await _db.QueryFirstOrDefaultAsync<(int Status, string Message)>(
+            var result = await _db.QueryFirstOrDefaultAsync<EmployeeFullProfileModel>(
                 "LMS_InsertFullEmployeeDetails",
                 new
                 {
-                    model.empPk,
                     model.empCode,
                     model.firstName,
                     model.lastName,
@@ -61,6 +61,7 @@ namespace LMS.Services
 
             if (result == null)
                 throw new Exception("No employee record returned from save");
+
             return _mapper.Map<EmployeeFullProfileViewModel>(result);
         }
 

@@ -91,7 +91,7 @@ namespace LMS.Mapper
                 .ForMember(dest => dest.basicSalary, opt => opt.MapFrom(src => src.Basic_Salary))
                 .ForMember(dest => dest.payFrequency, opt => opt.MapFrom(src => src.Pay_Frequency));
 
-            //7. Get Employee Full Details
+            //8. Get My Leave
             CreateMap<MyLeaveHistoryModel, MyLeaveHistoryViewModel>()
                 .ForMember(dest => dest.leaveId, opt => opt.MapFrom(src => src.SS_Leave_PK))
                 .ForMember(dest => dest.empCode, opt => opt.MapFrom(src => src.SS_Emp_Code))
@@ -103,6 +103,30 @@ namespace LMS.Mapper
                 .ForMember(dest => dest.duration, opt => opt.MapFrom(src => src.Duration))
                 .ForMember(dest => dest.leaveStatus, opt => opt.MapFrom(src => src.Leave_Status))
                 .ForMember(dest => dest.reason, opt => opt.MapFrom(src => src.Reason));
+
+            //9. Get Users Leave
+            CreateMap<UsersLeaveHistoryModel, UsersLeaveHistoryViewModel>()
+                .ForMember(dest => dest.empCode, opt => opt.MapFrom(src => src.SS_Emp_Code))
+                .ForMember(dest => dest.leaveType, opt => opt.MapFrom(src => src.LeaveType))
+                .ForMember(dest => dest.fromDate, opt => opt.MapFrom(src => src.From_Date))
+                .ForMember(dest => dest.toDate, opt => opt.MapFrom(src => src.To_Date))
+                .ForMember(dest => dest.duration, opt => opt.MapFrom(src => src.Duration))
+                .ForMember(dest => dest.leaveStatus, opt => opt.MapFrom(src => src.Leave_Status))
+                .ForMember(dest => dest.reason, opt => opt.MapFrom(src => src.Reason))
+                .ForMember(dest => dest.fullName, opt => opt.MapFrom(src => src.Full_Name));
+
+            //10. Get Users Leave
+            CreateMap<LeaveActionModel, LeaveActionViewModel>()
+                .ForMember(dest => dest.fullName, opt => opt.MapFrom(src => src.Full_Name))
+                .ForMember(dest => dest.designation, opt => opt.MapFrom(src => src.Job_Title))
+                .ForMember(dest => dest.leavePK, opt => opt.MapFrom(src => src.SS_Leave_PK))
+                .ForMember(dest => dest.leaveType, opt => opt.MapFrom(src => src.Leave_Type))
+                .ForMember(dest => dest.duration, opt => opt.MapFrom(src => src.Duration))
+                .ForMember(dest => dest.reason, opt => opt.MapFrom(src => src.Reason))
+                .ForMember(dest => dest.fromDate, opt => opt.MapFrom(src => src.From_Date))
+                .ForMember(dest => dest.toDate, opt => opt.MapFrom(src => src.To_Date))
+                .ForMember(dest => dest.leaveStatus, opt => opt.MapFrom(src => src.Leave_Status))
+                .ForMember(dest => dest.updatedUser, opt => opt.MapFrom(src => src.Updated_User));
         }
     }
 }

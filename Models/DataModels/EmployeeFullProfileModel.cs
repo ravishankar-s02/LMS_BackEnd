@@ -1,4 +1,4 @@
-namespace LMS.Models.ViewModels
+namespace LMS.Models.DataModels
 {
     public class EmployeeFullProfileModel
     {   

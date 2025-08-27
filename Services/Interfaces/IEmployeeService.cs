@@ -6,7 +6,7 @@ namespace LMS.Services.Interfaces
 {
     public interface IEmployeeService
     {
-        Task<bool> InsertFullEmployeeDetails(EmployeeFullProfileViewModel model); // Add New Employee
+        Task<EmployeeFullProfileViewModel> InsertFullEmployeeDetails(EmployeeFullProfileViewModel model); // Add New Employee
         Task<IEnumerable<EmployeeFullProfileViewModel>> GetEmployeeFullProfileAsync(); // Get Employee Details
         Task<EmployeeFullProfileViewModel> UpdateFullEmployeeDetailsPUTAsync(EmployeeFullProfileViewModel model); // Employee Updations
     }

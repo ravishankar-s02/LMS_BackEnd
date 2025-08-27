@@ -46,19 +46,19 @@ namespace LMS.Services
                 "LMS_GetMyLeaveHistory",
                 new { EmpCode = empCode },
                 commandType: CommandType.StoredProcedure);
-            return _mapper.Map<IEnumerable<MyLeaveHistoryViewModel>>(result);;
+            return _mapper.Map<IEnumerable<MyLeaveHistoryViewModel>>(result);
         }
 
         public async Task<IEnumerable<UsersLeaveHistoryViewModel>> GetUsersLeaveHistoryAsync(string empCode)
         {
             var parameters = new DynamicParameters();
             parameters.Add("@SS_Emp_Code", empCode);
-            var result = await _db.QueryAsync<UsersLeaveHistoryViewModel>(
+            var result = await _db.QueryAsync<UsersLeaveHistoryModel>(
                 "LMS_GetUsersLeaveHistory",
                 parameters,
                 commandType: CommandType.StoredProcedure
             );
-            return result;
+            return _mapper.Map<IEnumerable<UsersLeaveHistoryViewModel>>(result);
         }
 
         public async Task<(int Status, string Message)> UpdateLeaveAsync(LeaveUpdateModel model)
@@ -112,11 +112,11 @@ namespace LMS.Services
             parameters.Add("@Action", model.Action?.ToUpper());
             parameters.Add("@SS_Emp_Code", model.EmpCode);
 
-            var result = await _db.QueryAsync<LeaveActionViewModel>(
+            var result = await _db.QueryAsync<LeaveActionModel>(
                 "LMS_UpdateLeaveRequest",
                 parameters,
                 commandType: CommandType.StoredProcedure);
-            return result;
+            return _mapper.Map<IEnumerable<LeaveActionViewModel>>(result);
         }
 
         public async Task<IEnumerable<MyLeaveSummaryViewModel>> GetMyLeaveSummaryAsync(string empCode)
