@@ -3,6 +3,7 @@ using System.Data.SqlClient;
 using System.Threading.Tasks;
 using Dapper;
 using AutoMapper;
+using LMS.Common;
 using LMS.Models.ViewModels;
 using LMS.Models.DataModels;
 using LMS.Services.Interfaces;
@@ -21,6 +22,14 @@ namespace LMS.Services
             _configuration = config;
             _mapper = mapper;
             _db = new SqlConnection(config.GetConnectionString("DefaultConnection"));
+        }
+
+        public IDbConnection Connection
+        {
+            get
+            {
+                return new SqlConnection(_configuration.GetConnectionString(Constants.databaseName));
+            }
         }
         
         public async Task<EmployeeFullProfileViewModel> InsertFullEmployeeDetails(EmployeeFullProfileViewModel model)
@@ -66,16 +75,42 @@ namespace LMS.Services
             return _mapper.Map<EmployeeFullProfileViewModel>(result);
         }
 
-        public async Task<IEnumerable<EmployeeFullProfileViewModel>> GetEmployeeFullProfileAsync()
+        public List<EmployeeFullProfileViewModel> GetFullEmployeeProfile(out int status, out string message)
         {
-            using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            var empFullDetailsVMs = new List<EmployeeFullProfileViewModel>();
+            status = 0;
+            message = string.Empty;
 
-            var result = await connection.QueryAsync<EmployeeFullProfileModel>(
-                "LMS_GetEmployeeFullDetails",
-                commandType: CommandType.StoredProcedure
-            );
+            try
+            {
+                using (IDbConnection con = Connection)
+                {
+                    con.Open();
+                    var parameters = new DynamicParameters();
 
-            return _mapper.Map<IEnumerable<EmployeeFullProfileViewModel>>(result);
+                    parameters.Add("@Status", dbType: DbType.Int16, direction: ParameterDirection.Output);
+                    parameters.Add("@ErrMsg", dbType: DbType.String, direction: ParameterDirection.Output, size: 5000);
+
+                    var result = con.Query<EmployeeFullProfileModel>(
+                        SPConstants.empFullDetails,
+                        parameters,
+                        commandType: CommandType.StoredProcedure
+                    ).ToList();
+
+                    // ✅ Map Model → ViewModel
+                    empFullDetailsVMs = result.Select(r => _mapper.Map<EmployeeFullProfileViewModel>(r)).ToList();
+
+                    status = parameters.Get<Int16>("@Status");
+                    message = parameters.Get<string>("@ErrMsg");
+                }
+            }
+            catch (Exception)
+            {
+                status = 5;
+                message = "An Exception Thrown";
+            }
+
+            return empFullDetailsVMs;
         }
 
 

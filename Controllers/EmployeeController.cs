@@ -1,7 +1,11 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using LMS.Models.DataModels;
 using LMS.Models.ViewModels;
 using LMS.Services.Interfaces;
+using LMS.Common;
 
 namespace LMS.Controllers
 {
@@ -10,10 +14,12 @@ namespace LMS.Controllers
     public class EmployeeController : ControllerBase
     {
         private readonly IEmployeeService _employeeService;
+        private readonly IMapper _mapper;
 
-        public EmployeeController(IEmployeeService employeeService)
+        public EmployeeController(IEmployeeService employeeService, IMapper mapper)
         {
             _employeeService = employeeService;
+            _mapper = mapper;
         }
 
         // 1. To Add New Employee
@@ -24,7 +30,6 @@ namespace LMS.Controllers
             {
                 var success = await _employeeService.InsertFullEmployeeDetails(model);
                  return Ok(success);
-                // return Ok(new { message = "Employee details inserted successfully." });
             }
             catch (Exception ex)
             {
@@ -34,10 +39,19 @@ namespace LMS.Controllers
 
         // 2. To Get Employee Details
         [HttpGet("view-employee-details")]
-        public async Task<IActionResult> GetEmployeeProfile()
+        public ActionResult<List<EmployeeFullProfileViewModel>> GetEmployeeProfile()
         {
-            var history = await _employeeService.GetEmployeeFullProfileAsync();
-            return Ok(history);
+            int status;
+            string message;
+
+            var empFullDetailsDMs = _employeeService.GetFullEmployeeProfile(out status, out message);
+
+            List<EmployeeFullProfileViewModel> result = _mapper.Map<List<EmployeeFullProfileViewModel>>(empFullDetailsDMs);
+
+            return StatusCode(
+                CommonUtility.HttpStatusCode(status),
+                new { data = result, status = status, message = message }
+            );
         }
 
         // 3. To Update Employee Details

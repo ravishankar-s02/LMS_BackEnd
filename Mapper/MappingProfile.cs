@@ -19,8 +19,19 @@ namespace LMS.Mapper
                 .ForMember(dest => dest.nationality, opt => opt.MapFrom(src => src.Nationality));
 
             // 2. Code master mapping
-            CreateMap<CommonModel, CommonViewModel>();
-            CreateMap<TeamModel, TeamViewModel>();
+            CreateMap<CommonModel, CommonViewModel>()
+                .ForMember(dest => dest.id, opt => opt.MapFrom(src => src.SS_Code_PK))
+                .ForMember(dest => dest.type, opt => opt.MapFrom(src => src.SS_Code_Type))
+                .ForMember(dest => dest.code, opt => opt.MapFrom(src => src.SS_Code_Code))
+                .ForMember(dest => dest.screenName, opt => opt.MapFrom(src => src.Gender))
+                .ForMember(dest => dest.defaultFlag, opt => opt.MapFrom(src => src.Default_Flag));
+
+            CreateMap<TeamModel, TeamViewModel>()
+                .ForMember(dest => dest.id, opt => opt.MapFrom(src => src.SS_Team_PK))
+                .ForMember(dest => dest.type, opt => opt.MapFrom(src => src.SS_Code_Type))
+                .ForMember(dest => dest.code, opt => opt.MapFrom(src => src.SS_Code_Code))
+                .ForMember(dest => dest.screenName, opt => opt.MapFrom(src => src.Screen_Name))
+                .ForMember(dest => dest.defaultFlag, opt => opt.MapFrom(src => src.Default_Flag));
 
             // 3. Contact details mapping
             CreateMap<ContactDetailsModel, ContactDetailsViewModel>()
@@ -115,7 +126,7 @@ namespace LMS.Mapper
                 .ForMember(dest => dest.reason, opt => opt.MapFrom(src => src.Reason))
                 .ForMember(dest => dest.fullName, opt => opt.MapFrom(src => src.Full_Name));
 
-            //10. Get Users Leave
+            //10. Get Leave Action
             CreateMap<LeaveActionModel, LeaveActionViewModel>()
                 .ForMember(dest => dest.fullName, opt => opt.MapFrom(src => src.Full_Name))
                 .ForMember(dest => dest.designation, opt => opt.MapFrom(src => src.Job_Title))
@@ -127,6 +138,20 @@ namespace LMS.Mapper
                 .ForMember(dest => dest.toDate, opt => opt.MapFrom(src => src.To_Date))
                 .ForMember(dest => dest.leaveStatus, opt => opt.MapFrom(src => src.Leave_Status))
                 .ForMember(dest => dest.updatedUser, opt => opt.MapFrom(src => src.Updated_User));
+
+            //11. Get Employee Name Dropdown
+            CreateMap<EmployeeNameModel, EmployeeNameViewModel>()
+                .ForMember(dest => dest.empCode, opt => opt.MapFrom(src => src.SS_Emp_Code))
+                .ForMember(dest => dest.fullName, opt => opt.MapFrom(src => src.Full_Name));
+            
+            //12. Get Leave Summary
+            CreateMap<MyLeaveSummaryModel, MyLeaveSummaryViewModel>()
+                .ForMember(dest => dest.empCode, opt => opt.MapFrom(src => src.SS_Emp_Code))
+                .ForMember(dest => dest.leaveType, opt => opt.MapFrom(src => src.Leave_Type))
+                .ForMember(dest => dest.leaveTaken, opt => opt.MapFrom(src => src.Leave_Taken))
+                .ForMember(dest => dest.leaveScheduled, opt => opt.MapFrom(src => src.Leave_Scheduled))
+                .ForMember(dest => dest.leaveRemaining, opt => opt.MapFrom(src => src.Leave_Remaining));
+                
         }
     }
 }

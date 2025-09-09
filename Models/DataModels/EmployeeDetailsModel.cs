@@ -8,6 +8,7 @@ namespace LMS.Models.DataModels
         public string First_Name { get; set; }
         public string? Middle_Name { get; set; }
         public string Last_Name { get; set; }
+        public string Full_Name { get; set; }
         public DateTime? Date_Of_Birth { get; set; }
         public string Gender { get; set; }
         public string Marital_Status { get; set; }

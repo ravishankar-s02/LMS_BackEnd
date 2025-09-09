@@ -3,6 +3,7 @@ using System.Data.SqlClient;
 using System.Threading.Tasks;
 using Dapper;
 using AutoMapper;
+using LMS.Common;
 using LMS.Models.DataModels;
 using LMS.Models.ViewModels;
 using LMS.Services.Interfaces;
@@ -21,49 +22,129 @@ namespace LMS.Services
             _mapper = mapper;
         }
 
-        public async Task<EmployeeDetailsViewModel?> GetEmployeeDetailsByEmpIdAsync(string empCode)
+        public IDbConnection Connection
         {
-            using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-
-            var parameters = new DynamicParameters();
-            parameters.Add("@SS_Emp_Code", empCode);
-
-            var result = await connection.QueryFirstOrDefaultAsync<EmployeeDetailsModel>(
-                "LMS_EmployeeDetails",
-                parameters,
-                commandType: CommandType.StoredProcedure
-            );
-            return result == null ? null : _mapper.Map<EmployeeDetailsViewModel>(result);
+            get
+            {
+                return new SqlConnection(_configuration.GetConnectionString(Constants.databaseName));
+            }
         }
 
-        public async Task<ContactDetailsViewModel?> GetContactDetailsByEmpIdAsync(string empCode)
+        public List<EmployeeDetailsViewModel> GetEmployeeDetailsByEmpId(string empCode, out int status, out string message)
         {
-            using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            var employeeDetailsVMs = new List<EmployeeDetailsViewModel>();
+            status = 0;
+            message = string.Empty;
 
-            var parameters = new DynamicParameters();
-            parameters.Add("@SS_Emp_Code", empCode);
+            try
+            {
+                using (IDbConnection con = Connection)
+                {
+                    con.Open();
+                    var parameters = new DynamicParameters();
 
-            var result = await connection.QueryFirstOrDefaultAsync<ContactDetailsModel>(
-                "LMS_ContactDetails",
-                parameters,
-                commandType: CommandType.StoredProcedure
-            );
-            return result == null ? null : _mapper.Map<ContactDetailsViewModel>(result);
+                    parameters.Add("@SS_Emp_Code", empCode, DbType.String, ParameterDirection.Input, 50);
+                    parameters.Add("@Status", dbType: DbType.Int16, direction: ParameterDirection.Output);
+                    parameters.Add("@ErrMsg", dbType: DbType.String, direction: ParameterDirection.Output, size: 5000);
+
+                    var result = con.Query<EmployeeDetailsModel>(
+                        SPConstants.employeeDetails,
+                        parameters,
+                        commandType: CommandType.StoredProcedure
+                    ).ToList();
+
+                    // ✅ Map Model → ViewModel
+                    employeeDetailsVMs = result.Select(r => _mapper.Map<EmployeeDetailsViewModel>(r)).ToList();
+
+                    status = parameters.Get<Int16>("@Status");
+                    message = parameters.Get<string>("@ErrMsg");
+                }
+            }
+            catch (Exception)
+            {
+                status = 5;
+                message = "An Exception Thrown";
+            }
+
+            return employeeDetailsVMs;
         }
 
-        public async Task<TeamDetailsViewModel?> GetTeamDetailsByEmpIdAsync(string empCode)
+        public List<ContactDetailsViewModel> GetContactDetailsByEmpId(string empCode, out int status, out string message)
         {
-            using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            var contactDetailsVMs = new List<ContactDetailsViewModel>();
+            status = 0;
+            message = string.Empty;
 
-            var parameters = new DynamicParameters();
-            parameters.Add("@SS_Emp_Code", empCode);
+            try
+            {
+                using (IDbConnection con = Connection)
+                {
+                    con.Open();
+                    var parameters = new DynamicParameters();
 
-            var result = await connection.QueryFirstOrDefaultAsync<TeamDetailsModel>(
-                "LMS_TeamDetails",
-                parameters,
-                commandType: CommandType.StoredProcedure
-            );
-            return result == null ? null : _mapper.Map<TeamDetailsViewModel>(result);
+                    parameters.Add("@SS_Emp_Code", empCode, DbType.String, ParameterDirection.Input, 50);
+                    parameters.Add("@Status", dbType: DbType.Int16, direction: ParameterDirection.Output);
+                    parameters.Add("@ErrMsg", dbType: DbType.String, direction: ParameterDirection.Output, size: 5000);
+
+                    var result = con.Query<ContactDetailsModel>(
+                        SPConstants.contactDetails,
+                        parameters,
+                        commandType: CommandType.StoredProcedure
+                    ).ToList();
+
+                    // ✅ Map Model → ViewModel
+                    contactDetailsVMs = result.Select(r => _mapper.Map<ContactDetailsViewModel>(r)).ToList();
+
+                    status = parameters.Get<Int16>("@Status");
+                    message = parameters.Get<string>("@ErrMsg");
+                }
+            }
+            catch (Exception)
+            {
+                status = 5;
+                message = "An Exception Thrown";
+            }
+
+            return contactDetailsVMs;
+        }
+
+        public List<TeamDetailsViewModel> GetTeamDetailsByEmpId(string empCode, out int status, out string message)
+        {
+            var teamDetailsVMs = new List<TeamDetailsViewModel>();
+            status = 0;
+            message = string.Empty;
+
+            try
+            {
+                using (IDbConnection con = Connection)
+                {
+                    con.Open();
+                    var parameters = new DynamicParameters();
+
+                    parameters.Add("@SS_Emp_Code", empCode, DbType.String, ParameterDirection.Input, 50);
+                    parameters.Add("@Status", dbType: DbType.Int16, direction: ParameterDirection.Output);
+                    parameters.Add("@ErrMsg", dbType: DbType.String, direction: ParameterDirection.Output, size: 5000);
+
+                    var result = con.Query<TeamDetailsModel>(
+                        SPConstants.teamDetails,
+                        parameters,
+                        commandType: CommandType.StoredProcedure
+                    ).ToList();
+
+                    // ✅ Map Model → ViewModel
+                    teamDetailsVMs = result.Select(r => _mapper.Map<TeamDetailsViewModel>(r)).ToList();
+
+                    status = parameters.Get<Int16>("@Status");
+                    message = parameters.Get<string>("@ErrMsg");
+                }
+            }
+            catch (Exception)
+            {
+                status = 5;
+                message = "An Exception Thrown";
+            }
+
+            return teamDetailsVMs;
         }
     }
 }

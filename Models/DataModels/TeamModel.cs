@@ -2,10 +2,10 @@ namespace LMS.Models.DataModels
 {
     public class TeamModel
     {
-        public long Id { get; set; }
-        public string Type { get; set; }
-        public string Code { get; set; }
-        public string ScreenName { get; set; }
-        public int DefaultFlag { get; set; }
+        public long SS_Team_PK { get; set; }
+        public string SS_Code_Type { get; set; }
+        public string SS_Code_Code { get; set; }
+        public string Screen_Name { get; set; }
+        public int Default_Flag { get; set; }
     }
 }

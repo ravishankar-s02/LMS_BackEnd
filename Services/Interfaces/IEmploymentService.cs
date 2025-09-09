@@ -5,7 +5,7 @@ namespace LMS.Services.Interfaces
 {
     public interface IEmploymentService
     {
-        Task<JobDetailsViewModel?> GetJobDetailsByEmpIdAsync(string empId); // Job Details
-        Task<SalaryDetailsViewModel?> GetSalaryDetailsByEmpIdAsync(string empId); // Salary Details
+        List<JobDetailsViewModel> GetJobDetailsByEmpId(string empCode, out int status, out string message);
+        List<SalaryDetailsViewModel> GetSalaryDetailsByEmpId(string empCode, out int status, out string message);
     }
 }

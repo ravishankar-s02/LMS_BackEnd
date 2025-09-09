@@ -1,8 +1,11 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using LMS.Models.ViewModels;
 using LMS.Services.Interfaces;
 using LMS.Models.DataModels;
+using LMS.Common;
 
 namespace LMS.Controllers
 {
@@ -11,10 +14,12 @@ namespace LMS.Controllers
     public class LeaveManagementController : ControllerBase
     {
         private readonly ILeaveManagementService _leaveManagementService;
+        private readonly IMapper _mapper;
 
-        public LeaveManagementController(ILeaveManagementService leaveManagementService)
+        public LeaveManagementController(ILeaveManagementService leaveManagementService, IMapper mapper)
         {
             _leaveManagementService = leaveManagementService;
+            _mapper = mapper;
         }
 
         // 1. To Apply Leave
@@ -46,18 +51,36 @@ namespace LMS.Controllers
 
         // 2. To Get My Leave History
         [HttpGet("my-history/{empCode}")]
-        public async Task<IActionResult> GetMyLeaveHistory(string empCode)
+        public ActionResult<List<MyLeaveHistoryModel>> GetMyLeaveHistory(string empCode)
         {
-            var history = await _leaveManagementService.GetMyLeaveHistoryAsync(empCode);
-            return Ok(history);
+            int status;
+            string message;
+
+            var myLeaveHistoryDMs = _leaveManagementService.GetMyLeaveHistoryByEmpId(empCode, out status, out message);
+
+            List<MyLeaveHistoryViewModel> result = _mapper.Map<List<MyLeaveHistoryViewModel>>(myLeaveHistoryDMs);
+
+            return StatusCode(
+                CommonUtility.HttpStatusCode(status),
+                new { data = result, status = status, message = message }
+            );
         }
 
         // 3. To Get Users Leave History
         [HttpGet("users-history/{empCode}")]
-        public async Task<IActionResult> GetUsersLeaveHistory(string empCode)
+        public ActionResult<List<UsersLeaveHistoryViewModel>> GetUsersLeaveHistory(string empCode)
         {
-            var history = await _leaveManagementService.GetUsersLeaveHistoryAsync(empCode);
-            return Ok(history);
+            int status;
+            string message;
+
+            var usersLeaveHistoryDMs = _leaveManagementService.GetUsersLeaveHistoryByEmpId(empCode, out status, out message);
+
+            List<UsersLeaveHistoryViewModel> result = _mapper.Map<List<UsersLeaveHistoryViewModel>>(usersLeaveHistoryDMs);
+
+            return StatusCode(
+                CommonUtility.HttpStatusCode(status),
+                new { data = result, status = status, message = message }
+            );
         }
 
         // 4. To Perform Update Leave Operation
@@ -84,13 +107,19 @@ namespace LMS.Controllers
 
         // 5. To Get Leave Requests
         [HttpGet("leave-request/{empCode}")]
-        public async Task<IActionResult> GetLeaveAction([FromRoute] string empCode)
+        public ActionResult<List<LeaveActionViewModel>> GetLeaveRequest(string empCode)
         {
-            if (string.IsNullOrWhiteSpace(empCode))
-                return BadRequest("empCode is required.");
+            int status;
+            string message;
 
-            var history = await _leaveManagementService.GetLeaveActionAsync(empCode);
-            return Ok(history);
+            var leaveRequestDMs = _leaveManagementService.GetLeaveRequestByEmpId(empCode, out status, out message);
+
+            List<LeaveActionViewModel> result = _mapper.Map<List<LeaveActionViewModel>>(leaveRequestDMs);
+
+            return StatusCode(
+                CommonUtility.HttpStatusCode(status),
+                new { data = result, status = status, message = message }
+            );
         }
 
         // 6. To Approve or Cancel the Leave
@@ -103,10 +132,19 @@ namespace LMS.Controllers
 
         // 7. To Get Leave Summary
         [HttpGet("my-leave-summary/{empCode}")]
-        public async Task<IActionResult> GetMyLeaveSummary(string empCode)
+        public ActionResult<List<MyLeaveSummaryViewModel>> GetLeaveSummary(string empCode)
         {
-            var history = await _leaveManagementService.GetMyLeaveSummaryAsync(empCode);
-            return Ok(history);
+            int status;
+            string message;
+
+            var leaveSummaryDMs = _leaveManagementService.GetLeaveSummaryByEmpId(empCode, out status, out message);
+
+            List<MyLeaveSummaryViewModel> result = _mapper.Map<List<MyLeaveSummaryViewModel>>(leaveSummaryDMs);
+
+            return StatusCode(
+                CommonUtility.HttpStatusCode(status),
+                new { data = result, status = status, message = message }
+            );
         }
     }
 }

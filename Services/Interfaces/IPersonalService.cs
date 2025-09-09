@@ -5,8 +5,8 @@ namespace LMS.Services.Interfaces
 {
     public interface IPersonalService
     {
-        Task<EmployeeDetailsViewModel?> GetEmployeeDetailsByEmpIdAsync(string empId); // Employee Personal Details
-        Task<ContactDetailsViewModel?> GetContactDetailsByEmpIdAsync(string empId); // Employee Contact Details
-        Task<TeamDetailsViewModel?> GetTeamDetailsByEmpIdAsync(string empId); // Employee Team Details
+        List<EmployeeDetailsViewModel> GetEmployeeDetailsByEmpId(string empId, out int status, out string message); // Employee Personal Details
+        List<ContactDetailsViewModel> GetContactDetailsByEmpId(string empId, out int status, out string message); // Employee Contact Details
+        List<TeamDetailsViewModel> GetTeamDetailsByEmpId(string empId, out int status, out string message); // Employee Team Details
     }
 }

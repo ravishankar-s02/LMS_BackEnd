@@ -3,6 +3,7 @@ using System.Data.SqlClient;
 using System.Threading.Tasks;
 using Dapper;
 using AutoMapper;
+using LMS.Common;
 using LMS.Models.DataModels;
 using LMS.Models.ViewModels;
 using LMS.Services.Interfaces;
@@ -12,13 +13,23 @@ namespace LMS.Services
 {
     public class LeaveManagementService : ILeaveManagementService
     {
+        private readonly IConfiguration _configuration;
         private readonly IDbConnection _db;
         private readonly IMapper _mapper;
 
         public LeaveManagementService(IConfiguration configuration, IMapper mapper)
         {
+            _configuration = configuration;
             _db = new SqlConnection(configuration.GetConnectionString("DefaultConnection"));
             _mapper = mapper;
+        }
+
+        public IDbConnection Connection
+        {
+            get
+            {
+                return new SqlConnection(_configuration.GetConnectionString(Constants.databaseName));
+            }
         }
 
         public async Task<(int Status, string Message)> ApplyLeaveAsync(LeaveApplicationModel model)
@@ -40,25 +51,82 @@ namespace LMS.Services
                 commandType: CommandType.StoredProcedure);
             return result;
         }
-        public async Task<IEnumerable<MyLeaveHistoryViewModel>> GetMyLeaveHistoryAsync(string empCode)
+        public List<MyLeaveHistoryViewModel> GetMyLeaveHistoryByEmpId(string empCode, out int status, out string message)
         {
-            var result = await _db.QueryAsync<MyLeaveHistoryModel>(
-                "LMS_GetMyLeaveHistory",
-                new { EmpCode = empCode },
-                commandType: CommandType.StoredProcedure);
-            return _mapper.Map<IEnumerable<MyLeaveHistoryViewModel>>(result);
+            var myLeaveHistoryVMs = new List<MyLeaveHistoryViewModel>();
+            status = 0;
+            message = string.Empty;
+
+            try
+            {
+                using (IDbConnection con = Connection)
+                {
+                    con.Open();
+                    var parameters = new DynamicParameters();
+
+                    parameters.Add("@SS_Emp_Code", empCode, DbType.String, ParameterDirection.Input, 50);
+                    parameters.Add("@Status", dbType: DbType.Int16, direction: ParameterDirection.Output);
+                    parameters.Add("@ErrMsg", dbType: DbType.String, direction: ParameterDirection.Output, size: 5000);
+
+                    var result = con.Query<MyLeaveHistoryModel>(
+                        SPConstants.myLeaveHistory,
+                        parameters,
+                        commandType: CommandType.StoredProcedure
+                    ).ToList();
+
+                    // ✅ Map Model → ViewModel
+                    myLeaveHistoryVMs = result.Select(r => _mapper.Map<MyLeaveHistoryViewModel>(r)).ToList();
+
+                    status = parameters.Get<Int16>("@Status");
+                    message = parameters.Get<string>("@ErrMsg");
+                }
+            }
+            catch (Exception)
+            {
+                status = 5;
+                message = "An Exception Thrown";
+            }
+
+            return myLeaveHistoryVMs;
         }
 
-        public async Task<IEnumerable<UsersLeaveHistoryViewModel>> GetUsersLeaveHistoryAsync(string empCode)
+        public List<UsersLeaveHistoryViewModel> GetUsersLeaveHistoryByEmpId(string empCode, out int status, out string message)
         {
-            var parameters = new DynamicParameters();
-            parameters.Add("@SS_Emp_Code", empCode);
-            var result = await _db.QueryAsync<UsersLeaveHistoryModel>(
-                "LMS_GetUsersLeaveHistory",
-                parameters,
-                commandType: CommandType.StoredProcedure
-            );
-            return _mapper.Map<IEnumerable<UsersLeaveHistoryViewModel>>(result);
+            var usersLeaveHistoryVMs = new List<UsersLeaveHistoryViewModel>();
+            status = 0;
+            message = string.Empty;
+
+            try
+            {
+                using (IDbConnection con = Connection)
+                {
+                    con.Open();
+                    var parameters = new DynamicParameters();
+
+                    parameters.Add("@SS_Emp_Code", empCode, DbType.String, ParameterDirection.Input, 50);
+                    parameters.Add("@Status", dbType: DbType.Int16, direction: ParameterDirection.Output);
+                    parameters.Add("@ErrMsg", dbType: DbType.String, direction: ParameterDirection.Output, size: 5000);
+
+                    var result = con.Query<UsersLeaveHistoryModel>(
+                        SPConstants.usersLeaveHistory,
+                        parameters,
+                        commandType: CommandType.StoredProcedure
+                    ).ToList();
+
+                    // ✅ Map Model → ViewModel
+                    usersLeaveHistoryVMs = result.Select(r => _mapper.Map<UsersLeaveHistoryViewModel>(r)).ToList();
+
+                    status = parameters.Get<Int16>("@Status");
+                    message = parameters.Get<string>("@ErrMsg");
+                }
+            }
+            catch (Exception)
+            {
+                status = 5;
+                message = "An Exception Thrown";
+            }
+
+            return usersLeaveHistoryVMs;
         }
 
         public async Task<(int Status, string Message)> UpdateLeaveAsync(LeaveUpdateModel model)
@@ -92,16 +160,43 @@ namespace LMS.Services
             return result;
         }
 
-        public async Task<IEnumerable<LeaveActionViewModel>> GetLeaveActionAsync(string empCode)
+        public List<LeaveActionViewModel> GetLeaveRequestByEmpId(string empCode, out int status, out string message)
         {
-            var parameters = new DynamicParameters();
-            parameters.Add("@SS_Emp_Code", empCode);
+            var leaveRequestVMs = new List<LeaveActionViewModel>();
+            status = 0;
+            message = string.Empty;
 
-            var result = await _db.QueryAsync<LeaveActionViewModel>(
-                "LMS_GetLeaveRequest",
-                parameters,
-                commandType: CommandType.StoredProcedure);
-            return result;
+            try
+            {
+                using (IDbConnection con = Connection)
+                {
+                    con.Open();
+                    var parameters = new DynamicParameters();
+
+                    parameters.Add("@SS_Emp_Code", empCode, DbType.String, ParameterDirection.Input, 50);
+                    parameters.Add("@Status", dbType: DbType.Int16, direction: ParameterDirection.Output);
+                    parameters.Add("@ErrMsg", dbType: DbType.String, direction: ParameterDirection.Output, size: 5000);
+
+                    var result = con.Query<LeaveActionModel>(
+                        SPConstants.leaveRequest,
+                        parameters,
+                        commandType: CommandType.StoredProcedure
+                    ).ToList();
+
+                    // ✅ Map Model → ViewModel
+                    leaveRequestVMs = result.Select(r => _mapper.Map<LeaveActionViewModel>(r)).ToList();
+
+                    status = parameters.Get<Int16>("@Status");
+                    message = parameters.Get<string>("@ErrMsg");
+                }
+            }
+            catch (Exception)
+            {
+                status = 5;
+                message = "An Exception Thrown";
+            }
+
+            return leaveRequestVMs;
         }
 
 
@@ -119,13 +214,43 @@ namespace LMS.Services
             return _mapper.Map<IEnumerable<LeaveActionViewModel>>(result);
         }
 
-        public async Task<IEnumerable<MyLeaveSummaryViewModel>> GetMyLeaveSummaryAsync(string empCode)
+        public List<MyLeaveSummaryViewModel> GetLeaveSummaryByEmpId(string empCode, out int status, out string message)
         {
-            var result = await _db.QueryAsync<MyLeaveSummaryViewModel>(
-                "LMS_GetLeaveSummary",
-                new { EmpCode = empCode },
-                commandType: CommandType.StoredProcedure);
-            return result;
+            var leaveSummaryVMs = new List<MyLeaveSummaryViewModel>();
+            status = 0;
+            message = string.Empty;
+
+            try
+            {
+                using (IDbConnection con = Connection)
+                {
+                    con.Open();
+                    var parameters = new DynamicParameters();
+
+                    parameters.Add("@SS_Emp_Code", empCode, DbType.String, ParameterDirection.Input, 50);
+                    parameters.Add("@Status", dbType: DbType.Int16, direction: ParameterDirection.Output);
+                    parameters.Add("@ErrMsg", dbType: DbType.String, direction: ParameterDirection.Output, size: 5000);
+
+                    var result = con.Query<MyLeaveSummaryModel>(
+                        SPConstants.leaveSummary,
+                        parameters,
+                        commandType: CommandType.StoredProcedure
+                    ).ToList();
+
+                    // ✅ Map Model → ViewModel
+                    leaveSummaryVMs = result.Select(r => _mapper.Map<MyLeaveSummaryViewModel>(r)).ToList();
+
+                    status = parameters.Get<Int16>("@Status");
+                    message = parameters.Get<string>("@ErrMsg");
+                }
+            }
+            catch (Exception)
+            {
+                status = 5;
+                message = "An Exception Thrown";
+            }
+
+            return leaveSummaryVMs;
         }
     }
 }
