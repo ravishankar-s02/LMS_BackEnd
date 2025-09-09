@@ -30,9 +30,9 @@ namespace LMS.Services
             }
         }
 
-        public List<EmployeeDetailsViewModel> GetEmployeeDetailsByEmpId(string empCode, out int status, out string message)
+        public EmployeeDetailsViewModel GetEmployeeDetailsByEmpId(string empCode, out int status, out string message)
         {
-            var employeeDetailsVMs = new List<EmployeeDetailsViewModel>();
+            var employeeDetailsVMs = new EmployeeDetailsViewModel();
             status = 0;
             message = string.Empty;
 
@@ -51,10 +51,10 @@ namespace LMS.Services
                         SPConstants.employeeDetails,
                         parameters,
                         commandType: CommandType.StoredProcedure
-                    ).ToList();
+                    );
 
                     // ✅ Map Model → ViewModel
-                    employeeDetailsVMs = result.Select(r => _mapper.Map<EmployeeDetailsViewModel>(r)).ToList();
+                    employeeDetailsVMs = result.Select(r => _mapper.Map<EmployeeDetailsViewModel>(r)).FirstOrDefault();
 
                     status = parameters.Get<Int16>("@Status");
                     message = parameters.Get<string>("@ErrMsg");
@@ -69,9 +69,9 @@ namespace LMS.Services
             return employeeDetailsVMs;
         }
 
-        public List<ContactDetailsViewModel> GetContactDetailsByEmpId(string empCode, out int status, out string message)
+        public ContactDetailsViewModel GetContactDetailsByEmpId(string empCode, out int status, out string message)
         {
-            var contactDetailsVMs = new List<ContactDetailsViewModel>();
+            var contactDetailsVMs = new ContactDetailsViewModel();
             status = 0;
             message = string.Empty;
 
@@ -90,10 +90,10 @@ namespace LMS.Services
                         SPConstants.contactDetails,
                         parameters,
                         commandType: CommandType.StoredProcedure
-                    ).ToList();
+                    );
 
                     // ✅ Map Model → ViewModel
-                    contactDetailsVMs = result.Select(r => _mapper.Map<ContactDetailsViewModel>(r)).ToList();
+                    contactDetailsVMs = result.Select(r => _mapper.Map<ContactDetailsViewModel>(r)).FirstOrDefault();
 
                     status = parameters.Get<Int16>("@Status");
                     message = parameters.Get<string>("@ErrMsg");
@@ -108,9 +108,9 @@ namespace LMS.Services
             return contactDetailsVMs;
         }
 
-        public List<TeamDetailsViewModel> GetTeamDetailsByEmpId(string empCode, out int status, out string message)
+        public TeamDetailsViewModel GetTeamDetailsByEmpId(string empCode, out int status, out string message)
         {
-            var teamDetailsVMs = new List<TeamDetailsViewModel>();
+            var teamDetailsVMs = new TeamDetailsViewModel();
             status = 0;
             message = string.Empty;
 
@@ -129,10 +129,10 @@ namespace LMS.Services
                         SPConstants.teamDetails,
                         parameters,
                         commandType: CommandType.StoredProcedure
-                    ).ToList();
+                    );
 
                     // ✅ Map Model → ViewModel
-                    teamDetailsVMs = result.Select(r => _mapper.Map<TeamDetailsViewModel>(r)).ToList();
+                    teamDetailsVMs = result.Select(r => _mapper.Map<TeamDetailsViewModel>(r)).FirstOrDefault();
 
                     status = parameters.Get<Int16>("@Status");
                     message = parameters.Get<string>("@ErrMsg");

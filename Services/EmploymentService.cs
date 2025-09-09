@@ -30,22 +30,9 @@ namespace LMS.Services
             }
         }
 
-        // public async Task<JobDetailsViewModel?> GetJobDetailsByEmpIdAsync(string empCode)
-        // {
-        //     using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-        //     var parameters = new DynamicParameters();
-        //     parameters.Add("@SS_Emp_Code", empCode);
-
-        //     var result = await connection.QueryFirstOrDefaultAsync<JobDetailsModel>(
-        //         "LMS_JobDetails",
-        //         parameters,
-        //         commandType: CommandType.StoredProcedure
-        //     );
-        //     return result == null ? null : _mapper.Map<JobDetailsViewModel>(result);
-        // }
-        public List<JobDetailsViewModel> GetJobDetailsByEmpId(string empCode, out int status, out string message)
+        public JobDetailsViewModel GetJobDetailsByEmpId(string empCode, out int status, out string message)
         {
-            var jobDetailsVMs = new List<JobDetailsViewModel>();
+            var jobDetailsVMs = new JobDetailsViewModel();
             status = 0;
             message = string.Empty;
 
@@ -64,10 +51,10 @@ namespace LMS.Services
                         SPConstants.jobDetails,
                         parameters,
                         commandType: CommandType.StoredProcedure
-                    ).ToList();
+                    );
 
                     // ✅ Map Model → ViewModel
-                    jobDetailsVMs = result.Select(r => _mapper.Map<JobDetailsViewModel>(r)).ToList();
+                    jobDetailsVMs = result.Select(r => _mapper.Map<JobDetailsViewModel>(r)).FirstOrDefault();
 
                     status = parameters.Get<Int16>("@Status");
                     message = parameters.Get<string>("@ErrMsg");
@@ -82,9 +69,9 @@ namespace LMS.Services
             return jobDetailsVMs;
         }
 
-        public List<SalaryDetailsViewModel> GetSalaryDetailsByEmpId(string empCode, out int status, out string message)
+        public SalaryDetailsViewModel GetSalaryDetailsByEmpId(string empCode, out int status, out string message)
         {
-            var salaryDetailsVMs = new List<SalaryDetailsViewModel>();
+            var salaryDetailsVMs = new SalaryDetailsViewModel();
             status = 0;
             message = string.Empty;
 
@@ -103,9 +90,9 @@ namespace LMS.Services
                         SPConstants.salaryDetails,
                         parameters,
                         commandType: CommandType.StoredProcedure
-                    ).ToList();
+                    );
 
-                    salaryDetailsVMs = result.Select(r => _mapper.Map<SalaryDetailsViewModel>(r)).ToList();
+                    salaryDetailsVMs = result.Select(r => _mapper.Map<SalaryDetailsViewModel>(r)).FirstOrDefault();
 
                     status = parameters.Get<Int16>("@Status");
                     message = parameters.Get<string>("@ErrMsg");

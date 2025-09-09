@@ -84,15 +84,25 @@ namespace LMS.Controllers
         }
 
         // 4. To Perform Update Leave Operation
-        [HttpPut("update-leave")]
-        public async Task<IActionResult> UpdateLeave([FromBody] LeaveUpdateModel model)
+        // [HttpPut("update-leave")]
+        // public async Task<IActionResult> UpdateLeave([FromBody] LeaveUpdateModel model)
+        // {
+        //     var result = await _leaveManagementService.UpdateLeaveAsync(model);
+        //     if (result.Status == 1)
+        //         return Ok(new { result.Status, result.Message });
+        //     else
+        //         return BadRequest(new { result.Status, result.Message });
+        // }
+        [Route("leave/update")]
+        [HttpPut]
+        public ActionResult<LeaveUpdateViewModel> UpdateLeave([FromBody] LeaveUpdateViewModel updateLeaveViewModel)
         {
-            var result = await _leaveManagementService.UpdateLeaveAsync(model);
-            if (result.Status == 1)
-                return Ok(new { result.Status, result.Message });
-            else
-                return BadRequest(new { result.Status, result.Message });
+            var leaveDM = _leaveManagementService.UpdateLeave(updateLeaveViewModel, out int status, out string message);
+            LeaveUpdateViewModel result = _mapper.Map<LeaveUpdateViewModel>(leaveDM);
+
+            return StatusCode(CommonUtility.HttpStatusCode(status), new { data = result, status, message });
         }
+
 
         // 4. To Perform Delete Operation
         [HttpPut("delete-leave")]

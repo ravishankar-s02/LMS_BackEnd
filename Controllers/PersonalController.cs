@@ -23,14 +23,14 @@ namespace LMS.Controllers
 
         //1. To Get Employee Personal Details
         [HttpGet("employee/{empId}")]
-        public ActionResult<List<EmployeeDetailsViewModel>> GetEmployeeDetails(string empId)
+        public ActionResult<EmployeeDetailsViewModel> GetEmployeeDetails(string empId)
         {
             int status;
             string message;
 
             var employeeDetailsDMs = _personalService.GetEmployeeDetailsByEmpId(empId, out status, out message);
             
-            List<EmployeeDetailsViewModel> result = _mapper.Map<List<EmployeeDetailsViewModel>>(employeeDetailsDMs);
+            EmployeeDetailsViewModel result = _mapper.Map<EmployeeDetailsViewModel>(employeeDetailsDMs);
             
             return StatusCode(
                 CommonUtility.HttpStatusCode(status),
@@ -40,14 +40,14 @@ namespace LMS.Controllers
 
         //2. To Get Employee Contact Details
         [HttpGet("contact/{empId}")]
-        public ActionResult<List<ContactDetailsViewModel>> GetContactDetails(string empId)
+        public ActionResult<ContactDetailsViewModel> GetContactDetails(string empId)
         {
             int status;
             string message;
 
             var contactDetailsDMs = _personalService.GetContactDetailsByEmpId(empId, out status, out message);
 
-            List<ContactDetailsViewModel> result = _mapper.Map<List<ContactDetailsViewModel>>(contactDetailsDMs);
+            ContactDetailsViewModel result = _mapper.Map<ContactDetailsViewModel>(contactDetailsDMs);
 
             return StatusCode(
                 CommonUtility.HttpStatusCode(status),
@@ -57,14 +57,14 @@ namespace LMS.Controllers
 
         //3. To Get Employee Team Details
         [HttpGet("team/{empId}")]
-        public ActionResult<List<TeamDetailsViewModel>> GetTeamDetails(string empId)
+        public ActionResult<TeamDetailsViewModel> GetTeamDetails(string empId)
         {
             int status;
             string message;
 
             var teamDetailsDMs = _personalService.GetTeamDetailsByEmpId(empId, out status, out message);
 
-            List<TeamDetailsViewModel> result = _mapper.Map<List<TeamDetailsViewModel>>(teamDetailsDMs);
+            TeamDetailsViewModel result = _mapper.Map<TeamDetailsViewModel>(teamDetailsDMs);
 
             return StatusCode(
                 CommonUtility.HttpStatusCode(status),

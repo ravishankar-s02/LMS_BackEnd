@@ -11,7 +11,8 @@ namespace LMS.Services.Interfaces
         List<MyLeaveHistoryViewModel> GetMyLeaveHistoryByEmpId(string empCode, out int status, out string message);
         //Task<IEnumerable<UsersLeaveHistoryViewModel>> GetUsersLeaveHistoryAsync(string empCode); // Users Leave
         List<UsersLeaveHistoryViewModel> GetUsersLeaveHistoryByEmpId(string empCode, out int status, out string message);
-        Task<(int Status, string Message)> UpdateLeaveAsync(LeaveUpdateModel model); // Update Leave
+        //Task<(int Status, string Message)> UpdateLeaveAsync(LeaveUpdateViewModel model); // Update Leave
+        LeaveUpdateModel UpdateLeave(LeaveUpdateViewModel updateLeaveViewModel, out int status, out string message);
         Task<(int Status, string Message)> DeleteLeaveAsync(LeaveDeleteModel model); // Delete Leave
         //Task<IEnumerable<LeaveActionViewModel>> GetLeaveActionAsync(string empCode); // Leave Request
         List<LeaveActionViewModel> GetLeaveRequestByEmpId(string empCode, out int status, out string message);

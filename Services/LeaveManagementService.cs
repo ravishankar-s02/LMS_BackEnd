@@ -129,25 +129,82 @@ namespace LMS.Services
             return usersLeaveHistoryVMs;
         }
 
-        public async Task<(int Status, string Message)> UpdateLeaveAsync(LeaveUpdateModel model)
+        // public async Task<(int Status, string Message)> UpdateLeaveAsync(LeaveUpdateViewModel model)
+        // {
+        //     var parameters = new DynamicParameters();
+        //     parameters.Add("@LeaveId", model.leaveId);
+        //     parameters.Add("@EmpCode", model.empCode);
+        //     parameters.Add("@LeaveType", model.leaveType);
+        //     parameters.Add("@FromDate", model.fromDate);
+        //     parameters.Add("@ToDate", model.toDate);
+        //     parameters.Add("@FromTime", model.fromTime);
+        //     parameters.Add("@ToTime", model.toTime);
+        //     parameters.Add("@TotalHours", model.totalHours);
+        //     parameters.Add("@Reason", model.reason);
+        //     parameters.Add("@Duration", model.duration);
+
+        //     var result = await _db.QueryFirstOrDefaultAsync<(int Status, string Message)>(
+        //         "LMS_UpdateLeaveApplication", parameters, commandType: CommandType.StoredProcedure);
+
+        //     return result;
+        // }
+        public LeaveUpdateModel UpdateLeave(LeaveUpdateViewModel updateLeaveViewModel, out int status, out string message)
         {
-            var parameters = new DynamicParameters();
-            parameters.Add("@LeaveId", model.leaveId);
-            parameters.Add("@EmpCode", model.empCode);
-            parameters.Add("@LeaveType", model.leaveType);
-            parameters.Add("@FromDate", model.fromDate);
-            parameters.Add("@ToDate", model.toDate);
-            parameters.Add("@FromTime", model.fromTime);
-            parameters.Add("@ToTime", model.toTime);
-            parameters.Add("@TotalHours", model.totalHours);
-            parameters.Add("@Reason", model.reason);
-            parameters.Add("@Duration", model.duration);
+            var leaveDM = new LeaveUpdateModel();
+            try
+            {
+                using (IDbConnection con = Connection)
+                {
+                    con.Open();
 
-            var result = await _db.QueryFirstOrDefaultAsync<(int Status, string Message)>(
-                "LMS_UpdateLeaveApplication", parameters, commandType: CommandType.StoredProcedure);
+                    var parameters = new DynamicParameters();
 
-            return result;
+                    // Map ViewModel → SP parameters explicitly
+                    parameters.Add("@LeaveId", updateLeaveViewModel.leaveId, DbType.Int64);
+                    parameters.Add("@EmpCode", updateLeaveViewModel.empCode, DbType.String);
+                    parameters.Add("@LeaveType", updateLeaveViewModel.leaveType, DbType.String);
+                    parameters.Add("@FromDate", updateLeaveViewModel.fromDate, DbType.Date);
+                    parameters.Add("@ToDate", updateLeaveViewModel.toDate, DbType.Date);
+
+                    // **Fix: convert empty strings to NULL for FromTime/ToTime**
+                    // parameters.Add("@FromTime", string.IsNullOrWhiteSpace(updateLeaveViewModel.fromTime) ? null : updateLeaveViewModel.fromTime, DbType.String);
+                    // parameters.Add("@ToTime", string.IsNullOrWhiteSpace(updateLeaveViewModel.toTime) ? null : updateLeaveViewModel.toTime, DbType.String);
+
+                    // **Fix: handle nullable TotalHours safely**
+                    // parameters.Add("@TotalHours", updateLeaveViewModel.totalHours ?? 0, DbType.Decimal);
+
+                    parameters.Add("@FromTime", updateLeaveViewModel.fromTime, DbType.String);
+                    parameters.Add("@ToTime", updateLeaveViewModel.toTime, DbType.String);
+                    parameters.Add("@TotalHours", updateLeaveViewModel.totalHours, DbType.Int64);
+
+                    parameters.Add("@Reason", updateLeaveViewModel.reason, DbType.String);
+                    parameters.Add("@Duration", updateLeaveViewModel.duration, DbType.String);
+
+                    // Output parameters
+                    parameters.Add("@Status", dbType: DbType.Int16, direction: ParameterDirection.Output, size: 1);
+                    parameters.Add("@ErrMsg", dbType: DbType.String, direction: ParameterDirection.Output, size: 500);
+
+                    // Execute SP
+                    con.Execute("LMS_UpdateLeaveApplication", parameters, commandType: CommandType.StoredProcedure);
+
+                    // Get outputs
+                    status = parameters.Get<Int16>("@Status");
+                    message = parameters.Get<string>("@ErrMsg");
+
+                    // Map back to DataModel for return
+                    leaveDM = _mapper.Map<LeaveUpdateModel>(updateLeaveViewModel);
+                }
+            }
+            catch (Exception ex)
+            {
+                status = -1;
+                message = ex.Message; // Provide exception message
+            }
+
+            return leaveDM;
         }
+
+
 
         public async Task<(int Status, string Message)> DeleteLeaveAsync(LeaveDeleteModel model)
         {

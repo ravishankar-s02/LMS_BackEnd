@@ -151,6 +151,20 @@ namespace LMS.Mapper
                 .ForMember(dest => dest.leaveTaken, opt => opt.MapFrom(src => src.Leave_Taken))
                 .ForMember(dest => dest.leaveScheduled, opt => opt.MapFrom(src => src.Leave_Scheduled))
                 .ForMember(dest => dest.leaveRemaining, opt => opt.MapFrom(src => src.Leave_Remaining));
+
+            //13. Update Leave
+            CreateMap<LeaveUpdateModel, LeaveUpdateViewModel>()
+                .ForMember(dest => dest.leaveId, opt => opt.MapFrom(src => src.SS_Leave_PK))
+                .ForMember(dest => dest.empCode, opt => opt.MapFrom(src => src.SS_Emp_Code))
+                .ForMember(dest => dest.leaveType, opt => opt.MapFrom(src => src.Leave_Type))
+                .ForMember(dest => dest.fromDate, opt => opt.MapFrom(src => src.From_Date))
+                .ForMember(dest => dest.toDate, opt => opt.MapFrom(src => src.To_Date))
+                .ForMember(dest => dest.fromTime, opt => opt.MapFrom(src => src.From_Time))
+                .ForMember(dest => dest.toTime, opt => opt.MapFrom(src => src.To_Time))
+                .ForMember(dest => dest.totalHours, opt => opt.MapFrom(src => src.Total_Hours))
+                .ForMember(dest => dest.reason, opt => opt.MapFrom(src => src.Reason))
+                .ForMember(dest => dest.duration, opt => opt.MapFrom(src => src.Duration))
+                .ReverseMap();
                 
         }
     }
