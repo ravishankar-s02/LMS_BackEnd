@@ -16,6 +16,10 @@ namespace LMS.Common
         public const string usersLeaveHistory = "LMS_GetUsersLeaveHistory";
         public const string leaveRequest = "LMS_GetLeaveRequest";
         public const string leaveSummary = "LMS_GetLeaveSummary";
+        public const string updateLeaveApplication = "LMS_UpdateLeaveApplication";
+        public const string deleteLeaveApplication = "LMS_DeleteLeaveApplication";
+        public const string applyLeave = "LMS_ApplyLeave";
+        public const string updateLeaveRequest = "LMS_UpdateLeaveRequest";
 
         //Common Dropdowns
         public const string commonDropdowns = "LMS_GetCommonByType";  
@@ -25,8 +29,12 @@ namespace LMS.Common
         // Employee
         public const string empFullDetails = "LMS_GetEmployeeFullDetails";
         public const string insertFullEmployeeDetails = "LMS_InsertFullEmployeeDetails";
+        public const string updateFullEmployeeDetails = "LMS_UpdateFullEmployeeDetails";
 
         //GooseMenu
         //public const string gooseMenu = "LMS_GetGooseMenu_Hierarchical";
+
+        //Login
+        public const string login = "LMS_EmployeeLogin";
     }
 }

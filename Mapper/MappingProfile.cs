@@ -100,7 +100,8 @@ namespace LMS.Mapper
                 .ForMember(dest => dest.payGrade, opt => opt.MapFrom(src => src.Pay_Grade))
                 .ForMember(dest => dest.currency, opt => opt.MapFrom(src => src.Currency))
                 .ForMember(dest => dest.basicSalary, opt => opt.MapFrom(src => src.Basic_Salary))
-                .ForMember(dest => dest.payFrequency, opt => opt.MapFrom(src => src.Pay_Frequency));
+                .ForMember(dest => dest.payFrequency, opt => opt.MapFrom(src => src.Pay_Frequency))
+                .ReverseMap();
 
             //8. Get My Leave
             CreateMap<MyLeaveHistoryModel, MyLeaveHistoryViewModel>()
@@ -165,7 +166,18 @@ namespace LMS.Mapper
                 .ForMember(dest => dest.reason, opt => opt.MapFrom(src => src.Reason))
                 .ForMember(dest => dest.duration, opt => opt.MapFrom(src => src.Duration))
                 .ReverseMap();
-                
+
+            //13. Delete Leave
+            CreateMap<LeaveDeleteModel, LeaveDeleteViewModel>()
+                .ForMember(dest => dest.leaveId, opt => opt.MapFrom(src => src.LeavePk))
+                .ForMember(dest => dest.empCode, opt => opt.MapFrom(src => src.EmpCode))
+                .ReverseMap();     
+
+            //13. Leave Approve or Cancel
+            CreateMap<LeaveActionRequestModel, LeaveActionRequestViewModel>()
+                .ForMember(dest => dest.LeaveId, opt => opt.MapFrom(src => src.LeavePk))
+                .ForMember(dest => dest.Action, opt => opt.MapFrom(src => src.Action))
+                .ForMember(dest => dest.EmpCode, opt => opt.MapFrom(src => src.SS_Emp_Code));         
         }
     }
 }

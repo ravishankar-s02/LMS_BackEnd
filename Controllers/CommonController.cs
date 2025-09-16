@@ -22,12 +22,6 @@ namespace LMS.Controllers
         }
 
         // 1. This is for Common Dropdowns
-        // [HttpGet("code-type/{type}")]
-        // public async Task<ActionResult<List<CommonViewModel>>> GetByType(string type)
-        // {
-        //     var data = await _service.GetCommonByTypeAsync(type);
-        //     return Ok(data);
-        // }
         [HttpGet("code-type/{type}")]
         public ActionResult<List<CommonViewModel>> GetByType(string type)
         {

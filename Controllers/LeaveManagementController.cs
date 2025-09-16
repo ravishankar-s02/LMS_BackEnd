@@ -23,30 +23,12 @@ namespace LMS.Controllers
         }
 
         // 1. To Apply Leave
-        [HttpPost("apply")]
-        public async Task<IActionResult> ApplyLeave([FromBody] LeaveApplicationViewModel model)
-        { 
-            // To Convert totalHours from string to decimal?
-            decimal? parsedTotalHours = decimal.TryParse(model.totalHours, out var th) ? th : (decimal?)null;
-
-            // Prepare data model to pass to service
-            var dataModel = new LeaveApplicationModel
-            {
-                EmpCode = model.empCode,
-                LeaveType = model.leaveType,
-                FromDate = model.fromDate,
-                ToDate = model.toDate,
-                FromTime = model.fromTime,
-                ToTime = model.toTime,
-                TotalHours = parsedTotalHours,
-                Duration = model.duration,
-                Reason = model.reason
-            };
-
-            var (status, message) = await _leaveManagementService.ApplyLeaveAsync(dataModel);
-            if (status == 1)
-                return Ok(new { message });
-            return BadRequest(new { message });
+        [Route("leave/apply")]
+        [HttpPost]
+        public IActionResult ApplyLeave([FromBody] LeaveApplicationViewModel leaveApplication)
+        {
+            long leavePk = _leaveManagementService.ApplyLeave(leaveApplication, out int status, out string message);
+            return StatusCode(CommonUtility.HttpStatusCode(status), new { data = new {}, status, message });
         }
 
         // 2. To Get My Leave History
@@ -84,35 +66,25 @@ namespace LMS.Controllers
         }
 
         // 4. To Perform Update Leave Operation
-        // [HttpPut("update-leave")]
-        // public async Task<IActionResult> UpdateLeave([FromBody] LeaveUpdateModel model)
-        // {
-        //     var result = await _leaveManagementService.UpdateLeaveAsync(model);
-        //     if (result.Status == 1)
-        //         return Ok(new { result.Status, result.Message });
-        //     else
-        //         return BadRequest(new { result.Status, result.Message });
-        // }
-        [Route("leave/update")]
+        [Route("update-leave")]
         [HttpPut]
         public ActionResult<LeaveUpdateViewModel> UpdateLeave([FromBody] LeaveUpdateViewModel updateLeaveViewModel)
         {
-            var leaveDM = _leaveManagementService.UpdateLeave(updateLeaveViewModel, out int status, out string message);
-            LeaveUpdateViewModel result = _mapper.Map<LeaveUpdateViewModel>(leaveDM);
+            var updateLeaveDM = _leaveManagementService.UpdateLeave(updateLeaveViewModel, out int status, out string message);
+            LeaveUpdateViewModel result = _mapper.Map<LeaveUpdateViewModel>(updateLeaveDM);
 
             return StatusCode(CommonUtility.HttpStatusCode(status), new { data = result, status, message });
         }
 
-
         // 4. To Perform Delete Operation
-        [HttpPut("delete-leave")]
-        public async Task<IActionResult> DeleteLeave([FromBody] LeaveDeleteModel model)
+        [Route("delete-leave")]
+        [HttpPut]
+        public ActionResult<LeaveDeleteViewModel> DeleteLeave([FromBody] LeaveDeleteViewModel deleteLeaveViewModel)
         {
-            var result = await _leaveManagementService.DeleteLeaveAsync(model);
-            if (result.Status == 1)
-                return Ok(new { result.Status, result.Message });
-            else
-                return BadRequest(new { result.Status, result.Message });
+            var deleteLeaveDM = _leaveManagementService.DeleteLeave(deleteLeaveViewModel, out int status, out string message);
+            LeaveDeleteViewModel result = _mapper.Map<LeaveDeleteViewModel>(deleteLeaveDM);
+
+            return StatusCode(CommonUtility.HttpStatusCode(status), new { data = result, status, message });
         }
 
         // 5. To Get Leave Requests
@@ -133,11 +105,13 @@ namespace LMS.Controllers
         }
 
         // 6. To Approve or Cancel the Leave
-        [HttpPost("leave-action/update")]
-        public async Task<IActionResult> UpdateLeaveAction([FromBody] LeaveActionRequestModel model)
+        [Route("leave-action/update")]
+        [HttpPost]
+        public IActionResult UpdateLeaveRequest([FromBody] LeaveActionRequestViewModel leaveRequestUpdate)
         {
-            var updatedList = await _leaveManagementService.UpdateLeaveActionAsync(model);
-            return Ok(updatedList);
+            var updatedList = _leaveManagementService.UpdateLeaveRequest(leaveRequestUpdate, out int status, out string message);
+            
+            return StatusCode(CommonUtility.HttpStatusCode(status), new { data = updatedList, status, message });
         }
 
         // 7. To Get Leave Summary

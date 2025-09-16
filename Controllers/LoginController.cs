@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using LMS.Models.ViewModels;
 using LMS.Services.Interfaces;
+using LMS.Common;
 
 namespace LMS.Controllers
 {
@@ -16,14 +17,13 @@ namespace LMS.Controllers
         }
 
         // 1. To Login
-        [HttpPost("")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        [Route("")]
+        [HttpPost]
+        public IActionResult Login([FromBody] LoginRequest request)
         {
-            var response = await _loginService.LoginAsync(request);
-            if (response.status == 1)
-                return Ok(response);
-            else
-                return Unauthorized(response);
+            var loginList = _loginService.Login(request, out int status, out string message);
+            
+            return StatusCode(CommonUtility.HttpStatusCode(status), new { data = loginList, status, message });
         }
     }
 }

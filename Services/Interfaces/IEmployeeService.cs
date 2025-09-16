@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using LMS.Models.ViewModels;
+using LMS.Models.DataModels;
 
 namespace LMS.Services.Interfaces
 {
@@ -9,6 +10,7 @@ namespace LMS.Services.Interfaces
         Task<EmployeeFullProfileViewModel> InsertFullEmployeeDetails(EmployeeFullProfileViewModel model); // Add New Employee
         //Task<IEnumerable<EmployeeFullProfileViewModel>> GetEmployeeFullProfileAsync(); // Get Employee Details
         List<EmployeeFullProfileViewModel> GetFullEmployeeProfile(out int status, out string message);
-        Task<EmployeeFullProfileViewModel> UpdateFullEmployeeDetailsPUTAsync(EmployeeFullProfileViewModel model); // Employee Updations
+        //Task<EmployeeFullProfileViewModel> UpdateFullEmployeeDetailsPUTAsync(EmployeeFullProfileViewModel model); // Employee Updations
+        EmployeeFullProfileModel UpdateEmpDetails(EmployeeFullProfileViewModel updateEmpDetailsVM, out int status, out string message);
     }
 }

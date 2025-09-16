@@ -31,26 +31,53 @@ namespace LMS.Services
                 return new SqlConnection(_configuration.GetConnectionString(Constants.databaseName));
             }
         }
-
-        public async Task<(int Status, string Message)> ApplyLeaveAsync(LeaveApplicationModel model)
+        public long ApplyLeave(LeaveApplicationViewModel leaveApplication, out int status, out string message)
         {
-            var result = await _db.QueryFirstOrDefaultAsync<(int, string)>(
-                "LMS_ApplyLeave",
-                new
+            // long leavePk = 0;
+            status = 0;
+            message = string.Empty;
+
+            try
+            {
+                using (IDbConnection con = Connection)
                 {
-                    EmpCode = model.EmpCode,
-                    LeaveType = model.LeaveType,
-                    FromDate = model.FromDate,
-                    ToDate = model.ToDate,
-                    FromTime = model.FromTime,
-                    ToTime = model.ToTime,
-                    TotalHours = model.TotalHours,  
-                    Duration = model.Duration,      
-                    Reason = model.Reason
-                },
-                commandType: CommandType.StoredProcedure);
-            return result;
+                    con.Open();
+                    var parameters = new DynamicParameters();
+
+                    // Map model to parameters
+                    parameters.Add("@EmpCode", leaveApplication.empCode, DbType.String);
+                    parameters.Add("@LeaveType", leaveApplication.leaveType, DbType.String);
+                    parameters.Add("@FromDate", leaveApplication.fromDate, DbType.Date);
+                    parameters.Add("@ToDate", leaveApplication.toDate, DbType.Date);
+                    parameters.Add("@FromTime", leaveApplication.fromTime, DbType.String);
+                    parameters.Add("@ToTime", leaveApplication.toTime, DbType.String);
+                    parameters.Add("@TotalHours", decimal.TryParse(leaveApplication.totalHours, out var th) ? th : (decimal?)null, DbType.Decimal);
+                    parameters.Add("@Duration", leaveApplication.duration, DbType.String);
+                    parameters.Add("@Reason", leaveApplication.reason, DbType.String);
+
+                    // Output params
+                    parameters.Add("@Status", dbType: DbType.Int16, direction: ParameterDirection.Output, size: 1);
+                    parameters.Add("@ErrMsg", dbType: DbType.String, direction: ParameterDirection.Output, size: 500);
+                    // parameters.Add("@LeavePk", dbType: DbType.Int64, direction: ParameterDirection.Output, size: 1);
+
+                    // Call stored procedure
+                    con.Execute(SPConstants.applyLeave, parameters, commandType: CommandType.StoredProcedure);
+
+                    // Get output values
+                    status = parameters.Get<Int16>("@Status");
+                    message = parameters.Get<string>("@ErrMsg");
+                    // leavePk = parameters.Get<Int64>("@LeavePk");
+                }
+            }
+            catch (Exception ex)
+            {
+                status = -1;
+                message = ex.Message;
+            }
+
+            return status;
         }
+
         public List<MyLeaveHistoryViewModel> GetMyLeaveHistoryByEmpId(string empCode, out int status, out string message)
         {
             var myLeaveHistoryVMs = new List<MyLeaveHistoryViewModel>();
@@ -150,7 +177,7 @@ namespace LMS.Services
         // }
         public LeaveUpdateModel UpdateLeave(LeaveUpdateViewModel updateLeaveViewModel, out int status, out string message)
         {
-            var leaveDM = new LeaveUpdateModel();
+            var updateLeaveDM = new LeaveUpdateModel();
             try
             {
                 using (IDbConnection con = Connection)
@@ -166,13 +193,6 @@ namespace LMS.Services
                     parameters.Add("@FromDate", updateLeaveViewModel.fromDate, DbType.Date);
                     parameters.Add("@ToDate", updateLeaveViewModel.toDate, DbType.Date);
 
-                    // **Fix: convert empty strings to NULL for FromTime/ToTime**
-                    // parameters.Add("@FromTime", string.IsNullOrWhiteSpace(updateLeaveViewModel.fromTime) ? null : updateLeaveViewModel.fromTime, DbType.String);
-                    // parameters.Add("@ToTime", string.IsNullOrWhiteSpace(updateLeaveViewModel.toTime) ? null : updateLeaveViewModel.toTime, DbType.String);
-
-                    // **Fix: handle nullable TotalHours safely**
-                    // parameters.Add("@TotalHours", updateLeaveViewModel.totalHours ?? 0, DbType.Decimal);
-
                     parameters.Add("@FromTime", updateLeaveViewModel.fromTime, DbType.String);
                     parameters.Add("@ToTime", updateLeaveViewModel.toTime, DbType.String);
                     parameters.Add("@TotalHours", updateLeaveViewModel.totalHours, DbType.Int64);
@@ -185,14 +205,20 @@ namespace LMS.Services
                     parameters.Add("@ErrMsg", dbType: DbType.String, direction: ParameterDirection.Output, size: 500);
 
                     // Execute SP
-                    con.Execute("LMS_UpdateLeaveApplication", parameters, commandType: CommandType.StoredProcedure);
+                    //con.Execute("LMS_UpdateLeaveApplication", parameters, commandType: CommandType.StoredProcedure);
+
+                    var result = con.Query<LeaveUpdateViewModel>(
+                        SPConstants.updateLeaveApplication,
+                        parameters,
+                        commandType: CommandType.StoredProcedure
+                    );
 
                     // Get outputs
                     status = parameters.Get<Int16>("@Status");
                     message = parameters.Get<string>("@ErrMsg");
 
                     // Map back to DataModel for return
-                    leaveDM = _mapper.Map<LeaveUpdateModel>(updateLeaveViewModel);
+                    updateLeaveDM = _mapper.Map<LeaveUpdateModel>(updateLeaveViewModel);
                 }
             }
             catch (Exception ex)
@@ -201,20 +227,44 @@ namespace LMS.Services
                 message = ex.Message; // Provide exception message
             }
 
-            return leaveDM;
+            return updateLeaveDM;
         }
-
-
-
-        public async Task<(int Status, string Message)> DeleteLeaveAsync(LeaveDeleteModel model)
+        public LeaveDeleteModel DeleteLeave(LeaveDeleteViewModel deleteLeaveViewModel, out int status, out string message)
         {
-            var parameters = new DynamicParameters();
-            parameters.Add("@LeaveId", model.leaveId);
-            parameters.Add("@EmpCode", model.empCode);
+            var deleteLeaveDM = new LeaveDeleteModel();
+            try
+            {
+                using (IDbConnection con = Connection)
+                {
+                    con.Open();
 
-            var result = await _db.QueryFirstOrDefaultAsync<(int, string)>(
-                "LMS_DeleteLeaveApplication", parameters, commandType: CommandType.StoredProcedure);
-            return result;
+                    var parameters = new DynamicParameters();
+
+                    parameters.Add("@LeavePk", deleteLeaveViewModel.leaveId, DbType.Int64);
+                    parameters.Add("@EmpCode", deleteLeaveViewModel.empCode, DbType.String);
+
+                    parameters.Add("@Status", dbType: DbType.Int16, direction: ParameterDirection.Output, size: 1);
+                    parameters.Add("@ErrMsg", dbType: DbType.String, direction: ParameterDirection.Output, size: 500);
+
+                    var result = con.Query<LeaveDeleteModel>(
+                        SPConstants.deleteLeaveApplication,
+                        parameters,
+                        commandType: CommandType.StoredProcedure
+                    );
+
+                    status = parameters.Get<Int16>("@Status");
+                    message = parameters.Get<string>("@ErrMsg");
+
+                    deleteLeaveDM = _mapper.Map<LeaveDeleteModel>(deleteLeaveViewModel);
+                }
+            }
+            catch (Exception ex)
+            {
+                status = -1;
+                message = ex.Message; // Provide exception message
+            }
+
+            return deleteLeaveDM;
         }
 
         public List<LeaveActionViewModel> GetLeaveRequestByEmpId(string empCode, out int status, out string message)
@@ -256,19 +306,82 @@ namespace LMS.Services
             return leaveRequestVMs;
         }
 
+        // public long UpdateLeaveRequest(LeaveActionRequestViewModel leaveRequestUpdate, out int status, out string message)
+        // {
+        //     status = 0;
+        //     message = string.Empty;
 
-        public async Task<IEnumerable<LeaveActionViewModel>> UpdateLeaveActionAsync(LeaveActionRequestModel model)
+        //     try
+        //     {
+        //         using (IDbConnection con = Connection)
+        //         {
+        //             con.Open();
+        //             var parameters = new DynamicParameters();
+
+        //             // Map model to parameters
+        //             parameters.Add("@LeavePK", leaveRequestUpdate.LeaveId, DbType.Int64);
+        //             parameters.Add("@Action", leaveRequestUpdate.Action, DbType.String);
+        //             parameters.Add("@SS_Emp_Code", leaveRequestUpdate.Empcode, DbType.String);
+
+        //             parameters.Add("@Status", dbType: DbType.Int16, direction: ParameterDirection.Output, size: 1);
+        //             parameters.Add("@ErrMsg", dbType: DbType.String, direction: ParameterDirection.Output, size: 500);
+
+        //             con.Execute(SPConstants.updateLeaveRequest, parameters, commandType: CommandType.StoredProcedure);
+
+        //             // Get output values
+        //             status = parameters.Get<Int16>("@Status");
+        //             message = parameters.Get<string>("@ErrMsg");
+        //         }
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         status = -1;
+        //         message = ex.Message;
+        //     }
+
+        //     return status;
+        // }
+        public object UpdateLeaveRequest(LeaveActionRequestViewModel leaveRequestUpdate, out int status, out string message)
         {
-            var parameters = new DynamicParameters();
-            parameters.Add("@LeavePK", model.LeavePK);
-            parameters.Add("@Action", model.Action?.ToUpper());
-            parameters.Add("@SS_Emp_Code", model.EmpCode);
+            status = 0;
+            message = string.Empty;
 
-            var result = await _db.QueryAsync<LeaveActionModel>(
-                "LMS_UpdateLeaveRequest",
-                parameters,
-                commandType: CommandType.StoredProcedure);
-            return _mapper.Map<IEnumerable<LeaveActionViewModel>>(result);
+            object leaveRequestUpdateDm = null;
+
+            try
+            {
+                using (IDbConnection con = Connection)
+                {
+                    con.Open();
+                    var parameters = new DynamicParameters();
+
+                    // Map model to parameters
+                    parameters.Add("@LeavePK", leaveRequestUpdate.LeaveId, DbType.Int64);
+                    parameters.Add("@Action", leaveRequestUpdate.Action, DbType.String);
+                    parameters.Add("@SS_Emp_Code", leaveRequestUpdate.EmpCode, DbType.String);
+
+                    parameters.Add("@Status", dbType: DbType.Int16, direction: ParameterDirection.Output, size: 1);
+                    parameters.Add("@ErrMsg", dbType: DbType.String, direction: ParameterDirection.Output, size: 500);
+
+                    // Use QuerySingleOrDefault to get SP return value
+                    leaveRequestUpdateDm = con.QuerySingleOrDefault<object>(
+                        SPConstants.updateLeaveRequest, 
+                        parameters, 
+                        commandType: CommandType.StoredProcedure
+                    );
+
+                    // Get output values
+                    status = parameters.Get<short>("@Status");
+                    message = parameters.Get<string>("@ErrMsg");
+                }
+            }
+            catch (Exception ex)
+            {
+                status = -1;
+                message = ex.Message;
+            }
+
+            return leaveRequestUpdateDm;
         }
 
         public List<MyLeaveSummaryViewModel> GetLeaveSummaryByEmpId(string empCode, out int status, out string message)

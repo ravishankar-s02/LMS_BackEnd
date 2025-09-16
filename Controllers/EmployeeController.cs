@@ -55,19 +55,14 @@ namespace LMS.Controllers
         }
 
         // 3. To Update Employee Details
-        [HttpPut("update-employee-details")]
-        public async Task<IActionResult> UpdateEmployeeProfile([FromBody] EmployeeFullProfileViewModel model)
+        [Route("update-employee-details")]
+        [HttpPut]
+        public ActionResult<EmployeeFullProfileViewModel> UpdateEmpDetails([FromBody] EmployeeFullProfileViewModel updateEmpDetailsVM)
         {
-            try
-            {
-                var updatedEmployee = await _employeeService.UpdateFullEmployeeDetailsPUTAsync(model);
-                return Ok(updatedEmployee);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
+            var updateEmpDetailsDM = _employeeService.UpdateEmpDetails(updateEmpDetailsVM, out int status, out string message);
+            EmployeeFullProfileViewModel result = _mapper.Map<EmployeeFullProfileViewModel>(updateEmpDetailsDM);
 
+            return StatusCode(CommonUtility.HttpStatusCode(status), new { data = result, status, message });
+        }
     }
 }

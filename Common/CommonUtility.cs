@@ -7,8 +7,7 @@ namespace LMS.Common
             // Map your service status codes to HTTP status codes
             return status switch
             {
-                1 => 200,  // Success
-                2 => 200,  // Optional: if 2 is also considered success
+                2 => 200,  // success
                 0 => 400,  // Bad request or failure
                 -1 => 500, // Internal server error
                 -2 => 404, // Not found

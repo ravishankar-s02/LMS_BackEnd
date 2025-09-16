@@ -67,11 +67,16 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "LMS API V1");
+        c.RoutePrefix = string.Empty; // Open Swagger at root URL
+    });
 }
 
 // 8. Middleware
 app.UseCors("AllowAll");
 app.UseAuthorization();
 app.MapControllers();
+
 app.Run();

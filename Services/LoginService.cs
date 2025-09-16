@@ -5,6 +5,7 @@ using LMS.Models.ViewModels;
 using LMS.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using LMS.Common;
 
 namespace LMS.Services
 {
@@ -17,35 +18,74 @@ namespace LMS.Services
             _configuration = configuration;
         }
 
-        public async Task<LoginResponse> LoginAsync(LoginRequest request)
+        public IDbConnection Connection
         {
-            using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-            var parameters = new DynamicParameters();
-            parameters.Add("@EmpCode", request.empCode);
-            parameters.Add("@Password", request.password);
-            parameters.Add("@Status", dbType: DbType.Byte, direction: ParameterDirection.Output);
-            parameters.Add("@ErrorMessage", dbType: DbType.String, size: 5000, direction: ParameterDirection.Output);
-            parameters.Add("@OutJSON", dbType: DbType.String, size: int.MaxValue, direction: ParameterDirection.Output);
-
-            await connection.ExecuteAsync("LMS_EmployeeLogin", parameters, commandType: CommandType.StoredProcedure);
-
-            var status = parameters.Get<byte>("@Status");
-            var errorMessage = parameters.Get<string>("@ErrorMessage");
-            var outJson = parameters.Get<string>("@OutJSON");
-
-            LoginUserDetails userDetails = null;
-
-            if (!string.IsNullOrEmpty(outJson))
+            get
             {
-                userDetails = JsonConvert.DeserializeObject<LoginUserDetails>(outJson);
+                return new SqlConnection(_configuration.GetConnectionString(Constants.databaseName));
+            }
+        }
+
+        public LoginResponse Login(LoginRequest request, out int status, out string message)
+        {
+            status = 0;
+            message = string.Empty;
+
+            LoginResponse loginResponse = null;
+
+            try
+            {
+                using (IDbConnection con = Connection)
+                {
+                    con.Open();
+                    var parameters = new DynamicParameters();
+
+                    // Map model to parameters
+                    parameters.Add("@EmpCode", request.EmpCode, DbType.String);
+                    parameters.Add("@Password", request.Password, DbType.String);
+
+                    parameters.Add("@Status", dbType: DbType.Int16, direction: ParameterDirection.Output, size: 1);
+                    parameters.Add("@ErrorMessage", dbType: DbType.String, direction: ParameterDirection.Output, size: 5000);
+                    parameters.Add("@OutJSON", dbType: DbType.String, direction: ParameterDirection.Output, size: int.MaxValue);
+
+                    // Call stored procedure
+                    con.Execute(SPConstants.login, parameters, commandType: CommandType.StoredProcedure);
+
+                    // Get output values
+                    status = parameters.Get<short>("@Status");
+                    message = parameters.Get<string>("@ErrorMessage");
+
+                    // Deserialize JSON into LoginResponse
+                    var outJson = parameters.Get<string>("@OutJSON");
+                    if (!string.IsNullOrEmpty(outJson))
+                    {
+                        loginResponse = JsonConvert.DeserializeObject<LoginResponse>(outJson);
+                        loginResponse.Status = (byte)status;
+                        loginResponse.ErrorMessage = message;
+                    }
+                    else
+                    {
+                        loginResponse = new LoginResponse
+                        {
+                            Status = (byte)status,
+                            ErrorMessage = message
+                        };
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                status = -1;
+                message = ex.Message;
+
+                loginResponse = new LoginResponse
+                {
+                    Status = (byte)status,
+                    ErrorMessage = message
+                };
             }
 
-            return new LoginResponse
-            {
-                status = status,
-                errorMessage = errorMessage,
-                result = userDetails
-            };
+            return loginResponse;
         }
     }
 }
