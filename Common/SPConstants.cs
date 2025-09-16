@@ -32,7 +32,7 @@ namespace LMS.Common
         public const string updateFullEmployeeDetails = "LMS_UpdateFullEmployeeDetails";
 
         //GooseMenu
-        //public const string gooseMenu = "LMS_GetGooseMenu_Hierarchical";
+        public const string gooseMenu = "LMS_GetGooseMenu_Hierarchical";
 
         //Login
         public const string login = "LMS_EmployeeLogin";

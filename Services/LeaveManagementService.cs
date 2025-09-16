@@ -156,25 +156,6 @@ namespace LMS.Services
             return usersLeaveHistoryVMs;
         }
 
-        // public async Task<(int Status, string Message)> UpdateLeaveAsync(LeaveUpdateViewModel model)
-        // {
-        //     var parameters = new DynamicParameters();
-        //     parameters.Add("@LeaveId", model.leaveId);
-        //     parameters.Add("@EmpCode", model.empCode);
-        //     parameters.Add("@LeaveType", model.leaveType);
-        //     parameters.Add("@FromDate", model.fromDate);
-        //     parameters.Add("@ToDate", model.toDate);
-        //     parameters.Add("@FromTime", model.fromTime);
-        //     parameters.Add("@ToTime", model.toTime);
-        //     parameters.Add("@TotalHours", model.totalHours);
-        //     parameters.Add("@Reason", model.reason);
-        //     parameters.Add("@Duration", model.duration);
-
-        //     var result = await _db.QueryFirstOrDefaultAsync<(int Status, string Message)>(
-        //         "LMS_UpdateLeaveApplication", parameters, commandType: CommandType.StoredProcedure);
-
-        //     return result;
-        // }
         public LeaveUpdateModel UpdateLeave(LeaveUpdateViewModel updateLeaveViewModel, out int status, out string message)
         {
             var updateLeaveDM = new LeaveUpdateModel();
