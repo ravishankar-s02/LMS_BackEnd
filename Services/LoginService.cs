@@ -41,8 +41,8 @@ namespace LMS.Services
                     var parameters = new DynamicParameters();
 
                     // Map model to parameters
-                    parameters.Add("@EmpCode", request.EmpCode, DbType.String);
-                    parameters.Add("@Password", request.Password, DbType.String);
+                    parameters.Add("@EmpCode", request.empCode, DbType.String);
+                    parameters.Add("@Password", request.password, DbType.String);
 
                     parameters.Add("@Status", dbType: DbType.Int16, direction: ParameterDirection.Output, size: 1);
                     parameters.Add("@ErrorMessage", dbType: DbType.String, direction: ParameterDirection.Output, size: 5000);
@@ -60,15 +60,15 @@ namespace LMS.Services
                     if (!string.IsNullOrEmpty(outJson))
                     {
                         loginResponse = JsonConvert.DeserializeObject<LoginResponse>(outJson);
-                        loginResponse.Status = (byte)status;
-                        loginResponse.ErrorMessage = message;
+                        loginResponse.status = (byte)status;
+                        loginResponse.errorMessage = message;
                     }
                     else
                     {
                         loginResponse = new LoginResponse
                         {
-                            Status = (byte)status,
-                            ErrorMessage = message
+                            status = (byte)status,
+                            errorMessage = message
                         };
                     }
                 }
@@ -80,8 +80,8 @@ namespace LMS.Services
 
                 loginResponse = new LoginResponse
                 {
-                    Status = (byte)status,
-                    ErrorMessage = message
+                    status = (byte)status,
+                    errorMessage = message
                 };
             }
 
