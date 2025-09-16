@@ -2,12 +2,12 @@ namespace LMS.Models.ViewModels
 {
     public class LoginResponse
     {
-        public byte Status { get; set; }
-        public string ErrorMessage { get; set; }
-        public string EmpCode { get; set; }
-        public string FullName { get; set; }
-        public string Email { get; set; }
-        public string Designation { get; set; }
-        public string LoginStatus { get; set; }
+        public byte status { get; set; }
+        public string errorMessage { get; set; }
+        public string empCode { get; set; }
+        public string fullName { get; set; }
+        public string email { get; set; }
+        public string designation { get; set; }
+        public string loginStatus { get; set; }
     }
 }
