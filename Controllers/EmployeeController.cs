@@ -24,16 +24,16 @@ namespace LMS.Controllers
 
         // 1. To Add New Employee
         [HttpPost("add-employee-details")]
-        public async Task<IActionResult> AddFullDetails([FromBody] EmployeeFullProfileViewModel model)
+        public IActionResult AddFullDetails([FromBody] EmployeeFullProfileViewModel model)
         {
             try
             {
-                var success = await _employeeService.InsertFullEmployeeDetails(model);
-                 return Ok(success);
+                var result = _employeeService.InsertFullEmployeeDetails(model, out int status, out string message);
+                return StatusCode(CommonUtility.HttpStatusCode(status), new { data = result, status, message });
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = ex.Message });
+                return StatusCode(500, new { data = new { }, status = -1, message = ex.Message });
             }
         }
 

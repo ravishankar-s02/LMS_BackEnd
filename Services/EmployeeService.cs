@@ -32,47 +32,73 @@ namespace LMS.Services
             }
         }
         
-        public async Task<EmployeeFullProfileViewModel> InsertFullEmployeeDetails(EmployeeFullProfileViewModel model)
+        public EmployeeFullProfileViewModel InsertFullEmployeeDetails(EmployeeFullProfileViewModel model, out int status, out string message)
         {
-            var result = await _db.QueryFirstOrDefaultAsync<EmployeeFullProfileModel>(
-                "LMS_InsertFullEmployeeDetails",
-                new
+            status = 0;
+            message = string.Empty;
+            EmployeeFullProfileViewModel employee = null;
+
+            try
+            {
+                using (IDbConnection con = Connection)
                 {
-                    model.empPk,
-                    model.empCode,
-                    model.firstName,
-                    model.lastName,
-                    model.dateOfBirth,
-                    model.gender,
-                    model.maritalStatus,
-                    model.nationality,
-                    model.phoneNumber,
-                    model.alternateNumber,
-                    model.email,
-                    model.streetAddress,
-                    model.city,
-                    model.state,
-                    model.zipCode,
-                    model.country,
-                    model.designation,
-                    model.teamHRHead,
-                    model.projectManager,
-                    model.teamLead,
-                    model.jobTitle,
-                    model.employmentStatus,
-                    model.joinedDate,
-                    model.skillset,
-                    model.payGrade,
-                    model.currency,
-                    model.basicSalary,
-                    model.payFrequency
-                },
-                commandType: CommandType.StoredProcedure);
+                    con.Open();
+                    var parameters = new DynamicParameters();
 
-            if (result == null)
-                throw new Exception("No employee record returned from save");
+                    // Input params
+                    parameters.Add("@EmpPk", model.empPk, DbType.String); // though SP does not use it much
+                    parameters.Add("@EmpCode", model.empCode, DbType.String);
+                    parameters.Add("@FirstName", model.firstName, DbType.String);
+                    parameters.Add("@LastName", model.lastName, DbType.String);
+                    parameters.Add("@DateOfBirth", model.dateOfBirth, DbType.Date);
+                    parameters.Add("@Gender", model.gender, DbType.String);
+                    parameters.Add("@MaritalStatus", model.maritalStatus, DbType.String);
+                    parameters.Add("@Nationality", model.nationality, DbType.String);
+                    parameters.Add("@PhoneNumber", model.phoneNumber, DbType.String);
+                    parameters.Add("@AlternateNumber", model.alternateNumber, DbType.String);
+                    parameters.Add("@Email", model.email, DbType.String);
+                    parameters.Add("@StreetAddress", model.streetAddress, DbType.String);
+                    parameters.Add("@City", model.city, DbType.String);
+                    parameters.Add("@State", model.state, DbType.String);
+                    parameters.Add("@ZipCode", model.zipCode, DbType.String);
+                    parameters.Add("@Country", model.country, DbType.String);
+                    parameters.Add("@Designation", model.designation, DbType.String);
+                    parameters.Add("@TeamHRHead", model.teamHRHead, DbType.String);
+                    parameters.Add("@ProjectManager", model.projectManager, DbType.String);
+                    parameters.Add("@TeamLead", model.teamLead, DbType.String);
+                    parameters.Add("@JobTitle", model.jobTitle, DbType.String);
+                    parameters.Add("@EmploymentStatus", model.employmentStatus, DbType.String);
+                    parameters.Add("@JoinedDate", model.joinedDate, DbType.Date);
+                    parameters.Add("@Skillset", model.skillset, DbType.String);
+                    parameters.Add("@PayGrade", model.payGrade, DbType.String);
+                    parameters.Add("@Currency", model.currency, DbType.String);
+                    parameters.Add("@BasicSalary", model.basicSalary, DbType.Decimal);
+                    parameters.Add("@PayFrequency", model.payFrequency, DbType.String);
 
-            return _mapper.Map<EmployeeFullProfileViewModel>(result);
+                    // Output params
+                    parameters.Add("@Status", dbType: DbType.Int16, direction: ParameterDirection.Output);
+                    parameters.Add("@ErrMsg", dbType: DbType.String, size: 500, direction: ParameterDirection.Output);
+
+                    // Execute & get employee profile from SELECT at end of SP
+                    var result = con.QueryFirstOrDefault<EmployeeFullProfileModel>(
+                        "LMS_InsertFullEmployeeDetails",
+                        parameters,
+                        commandType: CommandType.StoredProcedure);
+
+                    if (result != null)
+                        employee = _mapper.Map<EmployeeFullProfileViewModel>(result);
+
+                    status = parameters.Get<short>("@Status");
+                    message = parameters.Get<string>("@ErrMsg");
+                }
+            }
+            catch (Exception ex)
+            {
+                status = -1;
+                message = ex.Message;
+            }
+
+            return employee;
         }
 
         public List<EmployeeFullProfileViewModel> GetFullEmployeeProfile(out int status, out string message)
