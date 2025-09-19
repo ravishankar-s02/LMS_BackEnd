@@ -81,7 +81,7 @@ namespace LMS.Services
 
                     // Execute & get employee profile from SELECT at end of SP
                     var result = con.QueryFirstOrDefault<EmployeeFullProfileModel>(
-                        "LMS_InsertFullEmployeeDetails",
+                        SPConstants.insertFullEmployeeDetails,
                         parameters,
                         commandType: CommandType.StoredProcedure);
 
